@@ -67,7 +67,7 @@ export class DefaultNodeElement extends React.PureComponent {
             output += '<div>' + (node.description || node.meta.description) + '</div>';
         }
 
-        return output; 
+        return output;
     }
 
     style(){
@@ -77,7 +77,7 @@ export class DefaultNodeElement extends React.PureComponent {
             };
         }
     }
-    
+
     render(){
         var node = this.props.node;
         return (
@@ -105,7 +105,7 @@ export default class Node extends React.PureComponent {
     static isSelected(currentNode, selectedNode){
         if (!selectedNode) return false;
         if (selectedNode === currentNode) return true;
-        /* 
+        /*
         // We shouldn't need the below and can just rely on a simple reference comparison
         // Keeping around for now/reference.
         if (typeof selectedNode.name === 'string' && typeof currentNode.name === 'string') {
@@ -208,7 +208,7 @@ export default class Node extends React.PureComponent {
 
     /** Scrolls the scrollable element to the current context node, if any. */
     componentDidMount(){
-        var { 
+        var {
             countInActiveContext, lastActiveContextNode,
             node, scrollContainerWrapperElement, columnWidth, columnSpacing
         } = this.props,

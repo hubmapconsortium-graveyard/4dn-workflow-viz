@@ -4,9 +4,15 @@
   "private": true,
   "dependencies": {
     "crypto-js": "^3.1.9-1",
+    "d3": "^5.9.2",
+    "html-dom-parser": "^0.2.1",
+    "html-react-parser": "^0.7.1",
+    "js-md5": "^0.7.3",
+    "markdown-to-jsx": "^6.10.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "typescript": "^3.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
