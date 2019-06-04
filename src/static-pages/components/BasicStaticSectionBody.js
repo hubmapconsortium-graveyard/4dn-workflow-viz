@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 import { object, isServerSide } from './../../util';
 import { compiler } from 'markdown-to-jsx';
 import { OverviewHeadingContainer } from './../../item-pages/components/OverviewHeadingContainer';
-import { HiGlassAjaxLoadContainer, isHiglassViewConfigItem } from './../../item-pages/components/HiGlass';
 import * as store from './../../../store';
 import { replaceString as replacePlaceholderString } from './../placeholders';
 
@@ -37,8 +36,6 @@ export class BasicUserContentBody extends React.PureComponent {
         if (!Array.isArray(context['@type'])) throw new Error('Expected an @type on context.');
         if (context['@type'].indexOf('StaticSection') > -1){
             return 'StaticSection';
-        } else if (isHiglassViewConfigItem(context)){ // Func internally checks context['@type'].indexOf('HiglassViewConfig') > -1 also
-            return 'HiglassViewConfig';
         } else {
             // TODO: Case for JupyterNotebook (?) and/or yet-to-be-created ones.
             throw new Error('Unsupported Item type.');
@@ -59,13 +56,6 @@ export class BasicUserContentBody extends React.PureComponent {
 
         if (itemType === 'StaticSection') {
             return <BasicStaticSectionBody content={context.content} filetype={context.filetype} markdownCompilerOptions={markdownCompilerOptions} />;
-        } else if (itemType === 'HiglassViewConfig') {
-            return (
-                <React.Fragment>
-                    <EmbeddedHiglassActions context={context} parentComponentType={parentComponentType || BasicUserContentBody}/>
-                    <HiGlassAjaxLoadContainer {..._.omit(this.props, 'context', 'higlassItem')} higlassItem={context} />
-                </React.Fragment>
-            );
         } else {
             // TODO handle @type=JupyterHub?
             return (
@@ -97,12 +87,11 @@ export class ExpandableStaticHeader extends OverviewHeadingContainer {
 
     renderInnerBody(){
         var { context, href } = this.props,
-            open        = this.state.open,
-            isHiGlass   = isHiglassViewConfigItem(context);
+            open        = this.state.open;
 
         return (
             <div className="static-section-header pt-1 clearfix">
-                <BasicUserContentBody context={context} href={href} height={isHiGlass ? 300 : null} parentComponentType={ExpandableStaticHeader} />
+                <BasicUserContentBody context={context} href={href} height="300" parentComponentType={ExpandableStaticHeader} />
             </div>
         );
     }

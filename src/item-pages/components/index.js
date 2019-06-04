@@ -24,7 +24,6 @@ export { ItemDetailList, Detail } from './ItemDetailList';
 export { AuditTabView } from './AuditTabView';
 export { BadgesTabView } from './BadgesTabView';
 export { AttributionTabView } from './AttributionTabView';
-export { HiGlassAjaxLoadContainer, HiGlassPlainContainer, isHiglassViewConfigItem } from './HiGlass';
 export { WorkflowDetailPane } from './WorkflowDetailPane';
 export { WorkflowNodeElement } from './WorkflowNodeElement';
 export { WorkflowGraphSectionControls } from './WorkflowGraphSectionControls';
