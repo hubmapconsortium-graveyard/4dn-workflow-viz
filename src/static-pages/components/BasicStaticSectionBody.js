@@ -7,7 +7,6 @@ import { Button } from 'react-bootstrap';
 import { object, isServerSide } from './../../util';
 import { compiler } from 'markdown-to-jsx';
 import { OverviewHeadingContainer } from './../../item-pages/components/OverviewHeadingContainer';
-import * as store from './../../../store';
 import { replaceString as replacePlaceholderString } from './../placeholders';
 
 
@@ -23,7 +22,7 @@ export class BasicUserContentBody extends React.PureComponent {
         this.setState({ 'hasError' : true, 'errorInfo' : info }, ()=>{
             var href = this.props.href;
             if (!href) {
-                var storeState = store && store.getState();
+                var storeState = null;
                 href = storeState && storeState.href;
             }
         });

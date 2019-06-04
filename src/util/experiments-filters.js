@@ -230,10 +230,9 @@ export function changeFilter(
  * @returns {void}
  */
 export function saveChangedFilters(newExpSetFilters, href=null, callback=null){
-    if (!store)   store = require('./../../store');
     if (!Alerts) Alerts = require('../alerts').default;
 
-    var originalReduxState = store.getState();
+    var originalReduxState = null;
 
     if (!href){
         console.warn("No HREF (3rd param) supplied, using current href from Redux store. This might be wrong depending on where we should be browsing.");
@@ -449,7 +448,6 @@ export const NON_FILTER_URL_PARAMS = [
  */
 export function contextFiltersToExpSetFilters(contextFilters = null, browseBaseState = null){
     if (!contextFilters){ // Grab context.filters from Redux store if not supplied.
-        if (!store) store = require('./../../store');
         var storeState = store.getState();
         contextFilters = (storeState && storeState.context && storeState.context.filters) || null;
     }

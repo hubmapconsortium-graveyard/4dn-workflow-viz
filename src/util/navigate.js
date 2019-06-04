@@ -50,7 +50,7 @@ var navigate = function(href, options = {}, callback = null, fallbackCallback = 
  */
 navigate.setNavigateFunction = function(navFxn){
     if (typeof navFxn !== 'function') throw new Error("Not a function.");
-    store = require('../../store');
+    //store = require('../../store');
     //if (typeof window !== 'undefined') window.store2 = store;
     cachedNavFunction = navFxn;
 };
@@ -65,13 +65,6 @@ navigate.setNavigateFunction = function(navFxn){
 navigate.getBrowseBaseParams = function(browseBaseState = null){
     if (browseBaseState === 'item_search') {
         return {};
-    }
-    if (!browseBaseState){
-        if (store === null){
-            store = require('../../store');
-        }
-        var storeState = store.getState();
-        browseBaseState = storeState.browseBaseState;
     }
     return _.clone(navigate.getBrowseBaseParams.mappings[browseBaseState].parameters);
 };

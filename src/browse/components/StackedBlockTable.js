@@ -8,7 +8,6 @@ import _ from 'underscore';
 import url from 'url';
 import { IndeterminateCheckbox } from './../../forms/components/IndeterminateCheckbox';
 import { expFxn, console, isServerSide, object, Schemas, fileUtil, typedefs } from './../../util';
-import * as store from './../../../store';
 
 var { Item } = typedefs;
 

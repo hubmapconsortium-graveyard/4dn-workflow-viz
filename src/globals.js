@@ -1,6 +1,6 @@
 'use strict';
 
-import Registry from './../libs/registry';
+import Registry from './registry';
 import { console, isServerSide } from './util';
 
 /**

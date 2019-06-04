@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {  Button, Fade } from 'react-bootstrap';
 import _ from 'underscore';
-import * as store from '../store';
 import { typedefs } from './util';
 
 var { AlertObj } = typedefs;
@@ -33,7 +32,7 @@ export default class Alerts extends React.Component {
      * @returns {void} Nothing
      */
     static queue(alert, callback, currentAlerts = null){
-        if (!Array.isArray(currentAlerts)) currentAlerts = store.getState().alerts;
+        if (!Array.isArray(currentAlerts)) currentAlerts = [];
         var duplicateTitleAlertIdx = _.findIndex(currentAlerts, { 'title' : alert.title }),
             newAlerts = currentAlerts.slice(0);
 
@@ -43,9 +42,6 @@ export default class Alerts extends React.Component {
         } else {
             newAlerts.push(alert);
         }
-        store.dispatch({
-            type: { 'alerts' : newAlerts }
-        });
     }
 
     /**
@@ -57,11 +53,8 @@ export default class Alerts extends React.Component {
      * @returns {void} Nothing
      */
     static deQueue(alert, currentAlerts = null){
-        if (!Array.isArray(currentAlerts)) currentAlerts = store.getState().alerts;
+        if (!Array.isArray(currentAlerts)) currentAlerts = [];
         currentAlerts = currentAlerts.filter(function(a){ return a.title != alert.title; });
-        store.dispatch({
-            type: { 'alerts' : currentAlerts }
-        });
     }
 
     /**
@@ -74,7 +67,7 @@ export default class Alerts extends React.Component {
      * @returns {undefined} Nothing
      */
     static updateCurrentAlertsTitleMap(currentAlerts = null){
-        if (!Array.isArray(currentAlerts)) currentAlerts = store.getState().alerts;
+        if (!Array.isArray(currentAlerts)) currentAlerts = [];
         var titles = _.pluck(currentAlerts, 'title').sort();
         var removedTitles = _.difference(_.keys(alertNavigatationCountMap).sort(), titles);
         removedTitles.forEach(function(rt){
@@ -235,9 +228,6 @@ class AlertItem extends React.PureComponent {
     finishDismiss(){
         var { alert, dismissing, setDismissing, alerts } = this.props;
         setDismissing(_.without(dismissing, alert));
-        store.dispatch({
-            type: { 'alerts' : _.without(alerts, alert) }
-        });
     }
 
     render(){

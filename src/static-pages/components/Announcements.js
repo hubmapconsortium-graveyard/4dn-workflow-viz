@@ -3,7 +3,6 @@
 import React from 'react';
 import _ from 'underscore';
 import { console, ajax, DateUtility, object, Schemas } from './../../util';
-import { store } from '../../../store';
 import * as globals from './../../globals';
 import { Collapse, Button } from 'react-bootstrap';
 import { PartialList } from './../../item-pages/components';
