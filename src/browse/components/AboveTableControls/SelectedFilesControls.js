@@ -8,7 +8,7 @@ import _ from 'underscore';
 import memoize from 'memoize-one';
 import ReactTooltip from 'react-tooltip';
 import moment from 'moment';
-import { ButtonGroup, Checkbox, Button } from 'react-bootstrap';
+import { ButtonGroup, FormCheck, Button } from 'react-bootstrap';
 import { Schemas, DateUtility, ajax, JWT, typedefs } from './../../../util';
 import { allFilesFromExperimentSet, filesToAccessionTriples } from './../../../util/experiments-transforms';
 import * as vizUtil from './../../../viz/utilities';
@@ -198,11 +198,11 @@ export class SelectedFilesFilterByContent extends React.PureComponent {
             );
         return (
             <div className="col-sm-6 col-lg-3 file-type-checkbox" key={fileType} data-tip={tip}>
-                <Checkbox key={fileType} checked={selected}
+                <FormCheck key={fileType} checked={selected}
                     onChange={clickHandler ? clickHandler.bind(clickHandler, fileType) : null}
                     className={"text-ellipsis-container" + (selected ? ' is-active' : '')}>
                     { button_text_prefix }{ title } <sub>({ filesLength })</sub>
-                </Checkbox>
+                </FormCheck>
             </div>
         );
     }

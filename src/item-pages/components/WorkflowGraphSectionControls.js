@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { DropdownButton, MenuItem, Checkbox, Button } from 'react-bootstrap';
+import { DropdownButton, DropdownItem, FormCheck, Button } from 'react-bootstrap';
 import { CollapsibleItemViewButtonToolbar } from './CollapsibleItemViewButtonToolbar';
 
 
@@ -75,10 +75,10 @@ export class WorkflowGraphSectionControls extends React.PureComponent {
         var { showReferenceFiles, onToggleReferenceFiles, isReferenceFilesCheckboxDisabled } = this.props;
         if (typeof showReferenceFiles !== 'boolean' || typeof onToggleReferenceFiles !== 'function') return null;
         return (
-            <Checkbox checked={showReferenceFiles} onChange={onToggleReferenceFiles} key="ref-files-checkbox"
+            <FormCheck checked={showReferenceFiles} onChange={onToggleReferenceFiles} key="ref-files-checkbox"
                 disabled={isReferenceFilesCheckboxDisabled} className="checkbox-container for-state-showReferenceFiles">
                 Show Reference Files
-            </Checkbox>
+            </FormCheck>
         );
     }
 
@@ -96,10 +96,10 @@ export class WorkflowGraphSectionControls extends React.PureComponent {
             return null;
         }
         return (
-            <Checkbox checked={showParameters} onChange={onToggleShowParameters}
+            <FormCheck checked={showParameters} onChange={onToggleShowParameters}
                 className="checkbox-container for-state-showParameters" key="params-checkbox">
                 Show Parameters
-            </Checkbox>
+            </FormCheck>
         );
     }
 
@@ -120,15 +120,15 @@ export class WorkflowGraphSectionControls extends React.PureComponent {
     chartTypeDropdown(){
         var { context, showChartType, onChangeShowChartType } = this.props;
         var detail = WorkflowGraphSectionControls.analysisStepsSet(context) ? (
-            <MenuItem eventKey='detail' active={showChartType === 'detail'}>
+            <DropdownItem eventKey='detail' active={showChartType === 'detail'}>
                 Analysis Steps
-            </MenuItem>
+            </DropdownItem>
         ) : null;
 
         var basic = (
-            <MenuItem eventKey='basic' active={showChartType === 'basic'}>
+            <DropdownItem eventKey='basic' active={showChartType === 'basic'}>
                 Basic Inputs & Outputs
-            </MenuItem>
+            </DropdownItem>
         );
 
         return (
@@ -147,11 +147,11 @@ export class WorkflowGraphSectionControls extends React.PureComponent {
         var { showIndirectFiles, onToggleIndirectFiles, isShowMoreContextCheckboxDisabled } = this.props;
         if (typeof showIndirectFiles !== 'boolean' || typeof onToggleIndirectFiles !== 'function') return null;
         return (
-            <Checkbox checked={showIndirectFiles} onChange={onToggleIndirectFiles}
+            <FormCheck checked={showIndirectFiles} onChange={onToggleIndirectFiles}
                 disabled={isShowMoreContextCheckboxDisabled} className="checkbox-container"
                 key="show-indirect-files-checkbox">
                 Show More Context
-            </Checkbox>
+            </FormCheck>
         );
     }
 
@@ -159,10 +159,10 @@ export class WorkflowGraphSectionControls extends React.PureComponent {
         var { allRuns, onToggleAllRuns, loading, isAllRunsCheckboxDisabled } = this.props;
         if (typeof allRuns !== 'boolean' || typeof onToggleAllRuns !== 'function') return null;
         return (
-            <Checkbox checked={!allRuns && !isAllRunsCheckboxDisabled} onChange={onToggleAllRuns}
+            <FormCheck checked={!allRuns && !isAllRunsCheckboxDisabled} onChange={onToggleAllRuns}
                 disabled={isAllRunsCheckboxDisabled} className="checkbox-container" key="show-all-runs-checkbox">
                 { loading ? <i className="icon icon-spin icon-fw icon-circle-o-notch" style={{ marginRight : 3 }}/> : '' } Collapse Similar Runs
-            </Checkbox>
+            </FormCheck>
         );
     }
 
@@ -202,7 +202,7 @@ class RowSpacingTypeDropdown extends React.Component {
     render(){
         var currentKey = this.props.currentKey,
             menuItems = _.map(_.keys(RowSpacingTypeDropdown.titleMap), function(k){
-                return  <MenuItem key={k} eventKey={k} active={currentKey === k} children={RowSpacingTypeDropdown.titleMap[k]} />;
+                return  <DropdownItem key={k} eventKey={k} active={currentKey === k} children={RowSpacingTypeDropdown.titleMap[k]} />;
             });
 
         return (

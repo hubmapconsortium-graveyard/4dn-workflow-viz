@@ -4,7 +4,7 @@ import React from 'react';
 import _ from 'underscore';
 import url from 'url';
 import memoize from 'memoize-one';
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, DropdownButton, DropdownItem } from 'react-bootstrap';
 import * as vizUtil from './../utilities';
 import { Legend } from './../components';
 import { console, Filters, Schemas, layout } from './../../util';
@@ -241,7 +241,7 @@ export class UIControlsWrapper extends React.PureComponent {
                 title = <span className="inline-block" data-tip={tooltip} data-place="left">{ title }</span>;
             }
 
-            return <MenuItem
+            return <DropdownItem
                 key={key}
                 eventKey={key}
                 active={key === active}

@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { ButtonToolbar, ButtonGroup, DropdownButton, MenuItem, Button, Modal, Checkbox, Collapse } from 'react-bootstrap';
+import { ButtonToolbar, ButtonGroup, DropdownButton, DropdownItem, Button, Modal, FormCheck, Collapse } from 'react-bootstrap';
 import { columnsToColumnDefinitions } from './table-commons';
 
 
@@ -156,7 +156,7 @@ class ColumnOption extends React.PureComponent {
 
         return (
             <div className="col-sm-6 col-lg-3 column-option" key={field} data-tip={description} data-html={true}>
-                <Checkbox checked={isChecked} onChange={(e) => handleOptionVisibilityChange(field,e)}
+                <FormCheck checked={isChecked} onChange={(e) => handleOptionVisibilityChange(field,e)}
                     value={field} className={isChecked ? 'is-active' : null} children={title} />
             </div>
         );

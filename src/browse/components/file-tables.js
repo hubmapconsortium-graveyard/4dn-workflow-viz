@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import memoize from 'memoize-one';
 import url from 'url';
-import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Button, DropdownButton, DropdownItem } from 'react-bootstrap';
 import { StackedBlock, StackedBlockList, StackedBlockName, StackedBlockNameLabel, StackedBlockTable, FileEntryBlock, FilePairBlock, FileHeaderWithCheckbox } from './StackedBlockTable';
 import { expFxn, console, isServerSide, object, Schemas, typedefs, fileUtil, navigate } from './../../util';
 
@@ -72,9 +72,9 @@ class FileColumnActionsBtn extends React.PureComponent {
 
         if (otherBtnsExist){
             return (
-                <MenuItem data-tip="Visualize this file using the HiGlass Browser" onClick={onClick} key="higlass">
+                <DropdownItem data-tip="Visualize this file using the HiGlass Browser" onClick={onClick} key="higlass">
                     HiGlass
-                </MenuItem>
+                </DropdownItem>
             );
         } else {
             return (
@@ -107,9 +107,9 @@ class FileColumnActionsBtn extends React.PureComponent {
         }
 
         return (
-            <MenuItem data-tip="Visualize this file in TCGA's JuiceBox Browser" onClick={onClick} key="juicebox" className="text-left">
+            <DropdownItem data-tip="Visualize this file in TCGA's JuiceBox Browser" onClick={onClick} key="juicebox" className="text-left">
                 JuiceBox <i className="icon icon-fw icon-external-link text-smaller"/>
-            </MenuItem>
+            </DropdownItem>
         );
 
     }
@@ -136,9 +136,9 @@ class FileColumnActionsBtn extends React.PureComponent {
         }
 
         return (
-            <MenuItem data-tip="Visualize this file in WashU Epigenome Browser" onClick={onClick} key="epigenome" className="text-left">
+            <DropdownItem data-tip="Visualize this file in WashU Epigenome Browser" onClick={onClick} key="epigenome" className="text-left">
                 Epigenome Browser <i className="icon icon-fw icon-external-link text-smaller"/>
-            </MenuItem>
+            </DropdownItem>
         );
     }
 

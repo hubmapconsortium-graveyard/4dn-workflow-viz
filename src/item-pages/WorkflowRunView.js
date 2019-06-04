@@ -2,7 +2,7 @@
 
 import React from 'react';
 import _ from 'underscore';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, DropdownItem } from 'react-bootstrap';
 import { ItemPageTitle, ItemHeader, ItemDetailList, TabbedView, AuditTabView, WorkflowDetailPane } from './components';
 import DefaultItemView from './DefaultItemView';
 import { console, object, DateUtility, Filters, isServerSide } from './../util';

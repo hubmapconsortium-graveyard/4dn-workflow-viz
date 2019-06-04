@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem, DropdownButton, ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
+import { DropdownItem, DropdownButton, ButtonToolbar, ButtonGroup, Button } from 'react-bootstrap';
 
 
 export class LimitAndPageControls extends React.Component {
@@ -43,11 +43,11 @@ export class LimitAndPageControls extends React.Component {
                             <i className="icon icon-list icon-fw" style={{ fontSize: '0.825rem' }}></i> Show {limit}
                         </span>
                     } id="bg-nested-dropdown">
-                        <MenuItem eventKey={10} onSelect={this.handleLimitSelect}>Show 10</MenuItem>
-                        <MenuItem eventKey={25} onSelect={this.handleLimitSelect}>Show 25</MenuItem>
-                        <MenuItem eventKey={50} onSelect={this.handleLimitSelect}>Show 50</MenuItem>
-                        <MenuItem eventKey={100} onSelect={this.handleLimitSelect}>Show 100</MenuItem>
-                        <MenuItem eventKey={250} onSelect={this.handleLimitSelect}>Show 250</MenuItem>
+                        <DropdownItem eventKey={10} onSelect={this.handleLimitSelect}>Show 10</DropdownItem>
+                        <DropdownItem eventKey={25} onSelect={this.handleLimitSelect}>Show 25</DropdownItem>
+                        <DropdownItem eventKey={50} onSelect={this.handleLimitSelect}>Show 50</DropdownItem>
+                        <DropdownItem eventKey={100} onSelect={this.handleLimitSelect}>Show 100</DropdownItem>
+                        <DropdownItem eventKey={250} onSelect={this.handleLimitSelect}>Show 250</DropdownItem>
                     </DropdownButton>
 
                     <ButtonGroup>

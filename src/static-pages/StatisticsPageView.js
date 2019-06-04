@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 import { stringify } from 'query-string';
-import { DropdownButton, MenuItem, Checkbox } from 'react-bootstrap';
+import { DropdownButton, DropdownItem, Checkbox } from 'react-bootstrap';
 import url from 'url';
 import { console, navigate, ajax, DateUtility } from './../util';
 import {
@@ -731,7 +731,7 @@ class UsageChartsCountByDropdown extends React.PureComponent {
                 <DropdownButton data-tip="Count By" bsSize="sm" id={"select_count_for_" + chartID}
                     onSelect={this.handleSelection} title={dropdownTitle}>
                     {_.map([ ...menuOptions.entries() ], function([ k, title ]){
-                        return <MenuItem eventKey={k} key={k}>{ title }</MenuItem>;
+                        return <DropdownItem eventKey={k} key={k}>{ title }</DropdownItem>;
                     })}
                 </DropdownButton>
             </div>

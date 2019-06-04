@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { DropdownButton, Button, MenuItem, Panel, Table, Collapse} from 'react-bootstrap';
+import { DropdownButton, Button, DropdownItem, Panel, Table, Collapse} from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip';
 import globals from './../../globals';
 import { ajax, console, object, isServerSide } from './../../util';
