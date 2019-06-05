@@ -5,7 +5,12 @@ import * as serviceWorker from './serviceWorker';
 import WorkflowRunView          from './item-pages/WorkflowRunView';
 import WorkflowView             from './item-pages/WorkflowView';
 
-ReactDOM.render(<WorkflowRunView />, document.getElementById('root'));
+let workflow_output = require('./static-workflow-output.json');
+
+ReactDOM.render(
+	<WorkflowRunView context={workflow_output} />,
+	document.getElementById('root')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

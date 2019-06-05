@@ -272,4 +272,3 @@ export class WorkflowGraphSection extends React.PureComponent {
     }
 
 }
-

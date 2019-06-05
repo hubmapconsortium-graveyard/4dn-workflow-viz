@@ -222,7 +222,7 @@ export class TabbedView extends React.PureComponent {
     }
 
     componentDidMount(){
-        this.maybeSwitchTabAccordingToHref();
+        // this.maybeSwitchTabAccordingToHref();
     }
 
     componentDidUpdate(pastProps, pastState){
