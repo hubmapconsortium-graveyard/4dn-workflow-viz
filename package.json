@@ -1,5 +1,5 @@
 {
-  "name": "4dn-workflow-new",
+  "name": "4dn-workflow-viz",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,6 +11,7 @@
     "markdown-to-jsx": "^6.10.2",
     "memoize-one": "^5.0.4",
     "moment": "^2.24.0",
+    "node-sass": "^4.12.0",
     "nuka-carousel": "^4.5.8",
     "query-string": "^6.5.0",
     "rc-tabs": "^9.6.4",
@@ -25,6 +26,7 @@
     "react-scripts": "3.0.1",
     "react-sticky": "^6.0.3",
     "react-tooltip": "^3.10.0",
+    "scss": "^0.2.4",
     "typescript": "^3.5.1",
     "underscore": "^1.9.1"
   },
@@ -32,7 +34,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "scss": "node-sass --watch src/styles -o css"
   },
   "eslintConfig": {
     "extends": "react-app"
