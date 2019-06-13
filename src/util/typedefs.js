@@ -7,7 +7,6 @@
  */
 
 
-
 // ----------------------------------------------------------------------------
 // Common type-defs, e.g. for Item, JSONContentResponse, SearchResponse.
 
@@ -170,7 +169,6 @@ export var ColumnDefinitionRenderFxn;
  * @property {ColumnDefinitionRenderFxn} [render] - Optional function to render column in some custom way, for example in order to format a date-time value.
  */
 export var ColumnDefinition;
-
 
 
 // ----------------------------------------------------------------------------

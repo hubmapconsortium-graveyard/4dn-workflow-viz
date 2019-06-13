@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import WorkflowRunView          from './item-pages/WorkflowRunView';
-import WorkflowView             from './item-pages/WorkflowView';
+import WorkflowRunView from './item-pages/WorkflowRunView';
+import WorkflowView from './item-pages/WorkflowView';
 
 let workflow_output = require('./static-workflow-output.json');
 let context = {
@@ -11,7 +11,7 @@ let context = {
 };
 
 ReactDOM.render(
-	<WorkflowRunView context={context} />,
+	<WorkflowView context={context}/>,
 	document.getElementById('root')
 );
 

@@ -9,7 +9,7 @@
  * var { RotatedLabel, Legend } = require('./viz/components');
  */
 
-export { ActiveFiltersBar } from './ActiveFiltersBar';
-export { SVGFilters } from './SVGFilters';
-export { Legend } from './Legend';
-export { RotatedLabel } from './RotatedLabel';
+export {ActiveFiltersBar} from './ActiveFiltersBar';
+export {SVGFilters} from './SVGFilters';
+export {Legend} from './Legend';
+export {RotatedLabel} from './RotatedLabel';

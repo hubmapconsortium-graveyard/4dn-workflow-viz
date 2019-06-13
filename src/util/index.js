@@ -20,13 +20,13 @@ import patchedConsoleInstance from './patched-console';
 
 
 // Misc functions are top-level
-export { isServerSide } from './misc';
+export {isServerSide} from './misc';
 
 // Transforms, manipulations, parsers, etc. re: objects.
 export const object = objectMethods;
 
 // Navigation
-export { navigate } from './navigate';
+export {navigate} from './navigate';
 
 // Layout
 export const layout = layoutMethods;
@@ -48,7 +48,7 @@ export const expFxn = experimentTransformFunctions;
 
 export const Filters = experimentFilters;
 
-export { itemTypeHierarchy } from './itemTypeHierarchy';
+export {itemTypeHierarchy} from './itemTypeHierarchy';
 
 export const Schemas = SchemaUtilities;
 

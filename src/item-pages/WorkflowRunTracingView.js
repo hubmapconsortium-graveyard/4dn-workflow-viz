@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 import url from 'url';
-import { Checkbox, Button } from 'react-bootstrap';
+import {Checkbox, Button} from 'react-bootstrap';
 import * as globals from './../globals';
-import { console, object, expFxn, ajax, Schemas, layout } from './../util';
-import { WorkflowNodeElement, TabbedView, WorkflowDetailPane, WorkflowGraphSectionControls } from './components';
+import {console, object, expFxn, ajax, Schemas, layout} from './../util';
+import {WorkflowNodeElement, TabbedView, WorkflowDetailPane, WorkflowGraphSectionControls} from './components';
 import DefaultItemView from './DefaultItemView';
-import Graph, { parseAnalysisSteps, parseBasicIOAnalysisSteps, DEFAULT_PARSING_OPTIONS } from './../viz/Workflow';
-import { requestAnimationFrame } from './../viz/utilities';
-import { commonGraphPropsFromProps, WorkflowGraphSection, checkIfIndirectOrReferenceNodesExist } from './WorkflowView';
-import { mapEmbeddedFilesToStepRunDataIDs, allFilesForWorkflowRunMappedByUUID } from './WorkflowRunView';
+import Graph, {parseAnalysisSteps, parseBasicIOAnalysisSteps, DEFAULT_PARSING_OPTIONS} from './../viz/Workflow';
+import {requestAnimationFrame} from './../viz/utilities';
+import {commonGraphPropsFromProps, WorkflowGraphSection, checkIfIndirectOrReferenceNodesExist} from './WorkflowView';
+import {mapEmbeddedFilesToStepRunDataIDs, allFilesForWorkflowRunMappedByUUID} from './WorkflowRunView';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip';
 
@@ -28,251 +28,262 @@ var _testing_data;
 //_testing_data = STEPS;
 
 
-export function allFilesForWorkflowRunsMappedByUUID(items){
-    return _.reduce(items, function(m, workflowRun){
-        return _.extend(m, allFilesForWorkflowRunMappedByUUID(workflowRun));
-    }, {});
+export function allFilesForWorkflowRunsMappedByUUID(items) {
+	return _.reduce(items, function (m, workflowRun) {
+		return _.extend(m, allFilesForWorkflowRunMappedByUUID(workflowRun));
+	}, {});
 }
 
 
 export default class WorkflowRunTracingView extends DefaultItemView {
 
-    constructor(props){
-        super(props);
-        this.shouldGraphExist = this.shouldGraphExist.bind(this);
-        this.handleToggleAllRuns = this.handleToggleAllRuns.bind(this);
-        var steps = _testing_data || null;
-        this.state = {
-            'mounted' : false,
-            'steps' : steps,
-            'allRuns' : false,
-            'loadingGraphSteps' : false
-        };
-    }
+	constructor(props) {
+		super(props);
+		this.shouldGraphExist = this.shouldGraphExist.bind(this);
+		this.handleToggleAllRuns = this.handleToggleAllRuns.bind(this);
+		var steps = _testing_data || null;
+		this.state = {
+			'mounted': false,
+			'steps': steps,
+			'allRuns': false,
+			'loadingGraphSteps': false
+		};
+	}
 
-    componentDidMount(){
-        super.componentDidMount(...arguments); // DefaultItem's this.maybeSetRedirectedAlert()
-        var nextState = { 'mounted' : true };
-        if (!this.state.steps){
-            // Will always evaluate unless are using _testing_data to override.
-            nextState.loadingGraphSteps = true;
-            this.loadGraphSteps();
-        }
-        this.setState(nextState);
-    }
+	componentDidMount() {
+		super.componentDidMount(...arguments); // DefaultItem's this.maybeSetRedirectedAlert()
+		var nextState = {'mounted': true};
+		if (!this.state.steps) {
+			// Will always evaluate unless are using _testing_data to override.
+			nextState.loadingGraphSteps = true;
+			this.loadGraphSteps();
+		}
+		this.setState(nextState);
+	}
 
-    componentDidUpdate(pastProps, pastState){
-        if (this.props.context !== pastProps.context && !_testing_data){
-            console.info('Updated WorkflowRunTracingView -- re-loading steps.');
-            this.setState({ 'steps' : null, 'loadingGraphSteps' : true }, () => this.loadGraphSteps() );
-        }
-    }
+	componentDidUpdate(pastProps, pastState) {
+		if (this.props.context !== pastProps.context && !_testing_data) {
+			console.info('Updated WorkflowRunTracingView -- re-loading steps.');
+			this.setState({'steps': null, 'loadingGraphSteps': true}, () => this.loadGraphSteps());
+		}
+	}
 
-    shouldGraphExist(){
-        return true;
-    }
+	shouldGraphExist() {
+		return true;
+	}
 
-    loadGraphSteps(force = false, cb = null, cache = false){
-        const context = this.props.context;
-        const steps = this.state.steps;
+	loadGraphSteps(force = false, cb = null, cache = false) {
+		const context = this.props.context;
+		const steps = this.state.steps;
 
-        if (typeof context.uuid !== 'string') return;
-        if (!this.shouldGraphExist()) return;
-        if (!force && Array.isArray(steps) && steps.length > 0) return;
+		if (typeof context.uuid !== 'string') return;
+		if (!this.shouldGraphExist()) return;
+		if (!force && Array.isArray(steps) && steps.length > 0) return;
 
-        var tracingHref = '/trace_workflow_run_steps/' + context.uuid + '/',
-            callback = (r) => {
-                requestAnimationFrame(()=>{
-                    if (Array.isArray(r) && r.length > 0){
-                        this.setState({ 'steps' : r, 'loadingGraphSteps' : false }, cb);
-                    } else {
-                        this.setState({ 'steps' : 'ERROR', 'loadingGraphSteps' : false }, cb);
-                    }
-                });
-            },
-            opts = {};
+		var tracingHref = '/trace_workflow_run_steps/' + context.uuid + '/',
+			callback = (r) => {
+				requestAnimationFrame(() => {
+					if (Array.isArray(r) && r.length > 0) {
+						this.setState({'steps': r, 'loadingGraphSteps': false}, cb);
+					} else {
+						this.setState({'steps': 'ERROR', 'loadingGraphSteps': false}, cb);
+					}
+				});
+			},
+			opts = {};
 
-        if (!cache) {
-            opts['timestamp'] = moment.utc().unix();
-        }
-        if (this.state.allRuns === true){
-            opts['all_runs'] = true;
-        }
-        if (_.keys(opts).length > 0){
-            tracingHref += '?' + _.map(_.pairs(opts), function(p){ return p[0] + '=' + p[1]; }).join('&');
-        }
+		if (!cache) {
+			opts['timestamp'] = moment.utc().unix();
+		}
+		if (this.state.allRuns === true) {
+			opts['all_runs'] = true;
+		}
+		if (_.keys(opts).length > 0) {
+			tracingHref += '?' + _.map(_.pairs(opts), function (p) {
+				return p[0] + '=' + p[1];
+			}).join('&');
+		}
 
-        ajax.load(tracingHref, callback, 'GET', callback);
-    }
+		ajax.load(tracingHref, callback, 'GET', callback);
+	}
 
-    handleToggleAllRuns(){
-        this.setState(function({ allRuns }){
-            return { 'allRuns' : !allRuns, 'loadingGraphSteps' : true };
-        }, () => { this.loadGraphSteps(true); });
-    }
+	handleToggleAllRuns() {
+		this.setState(function ({allRuns}) {
+			return {'allRuns': !allRuns, 'loadingGraphSteps': true};
+		}, () => {
+			this.loadGraphSteps(true);
+		});
+	}
 }
 
 
 export class FileViewGraphSection extends WorkflowGraphSection {
 
-    /**
-     * Returns tab object representation for Graph section.
-     * Used by any ItemView which loads provenance graph steps into its state.steps.
-     *
-     * @param {Object} props - All props from parent Item view.
-     * @param {Object} state - All properties from parent Item view state.
-     * @param {!Object[]} state.steps - Steps of provenance graph, AJAXed-in by parent Item view.
-     * @param {boolean} state.mounted - Whether parent component/view has been mounted yet.
-     * @param {boolean} state.allRuns - Whether 'all runs' (vs grouped runs) are currently being loaded.
-     * @param {boolean} state.loadingGraphSteps - Whether steps are currently being loaded.
-     * @param {function} onToggleAllRuns - Callback function passed from parent Item view. Called when 'toggle all runs' checkbox is changed.
-     * @returns {{ tab: JSX.Element, key: string, disabled?: boolean, isDefault?: boolean, content: JSX.Element }} Tab object
-     */
-    static getTabObject(props, state, onToggleAllRuns, width){
-        var { loadingGraphSteps, steps } = state,
-            { context } = props,
-            iconClass   = "icon icon-fw icon-",
-            tooltip     = null;
+	/**
+	 * Returns tab object representation for Graph section.
+	 * Used by any ItemView which loads provenance graph steps into its state.steps.
+	 *
+	 * @param {Object} props - All props from parent Item view.
+	 * @param {Object} state - All properties from parent Item view state.
+	 * @param {!Object[]} state.steps - Steps of provenance graph, AJAXed-in by parent Item view.
+	 * @param {boolean} state.mounted - Whether parent component/view has been mounted yet.
+	 * @param {boolean} state.allRuns - Whether 'all runs' (vs grouped runs) are currently being loaded.
+	 * @param {boolean} state.loadingGraphSteps - Whether steps are currently being loaded.
+	 * @param {function} onToggleAllRuns - Callback function passed from parent Item view. Called when 'toggle all runs' checkbox is changed.
+	 * @returns {{ tab: JSX.Element, key: string, disabled?: boolean, isDefault?: boolean, content: JSX.Element }} Tab object
+	 */
+	static getTabObject(props, state, onToggleAllRuns, width) {
+		var {loadingGraphSteps, steps} = state,
+			{context} = props,
+			iconClass = "icon icon-fw icon-",
+			tooltip = null;
 
-        if (steps === null || loadingGraphSteps){
-            iconClass += 'circle-o-notch icon-spin';
-            tooltip = "Graph is loading";
-        } else if (!Array.isArray(steps) || steps.length === 0) {
-            iconClass += 'times';
-            tooltip = "Graph currently not available for this file. Please check back later.";
-        } else {
-            iconClass += 'sitemap icon-rotate-90';
-        }
+		if (steps === null || loadingGraphSteps) {
+			iconClass += 'circle-o-notch icon-spin';
+			tooltip = "Graph is loading";
+		} else if (!Array.isArray(steps) || steps.length === 0) {
+			iconClass += 'times';
+			tooltip = "Graph currently not available for this file. Please check back later.";
+		} else {
+			iconClass += 'sitemap icon-rotate-90';
+		}
 
-        return {
-            'tab'       : <span data-tip={tooltip} className="inline-block"><i className={iconClass} /> Provenance</span>,
-            'key'       : 'graph-section',
-            'disabled'  : !Array.isArray(steps) || steps.length === 0,
-            'content'   : (
-                <FileViewGraphSection {...props} {..._.pick(state, 'steps', 'mounted', 'allRuns')} width={width}
-                    key={"graph-for-" + context.uuid} onToggleAllRuns={onToggleAllRuns} loading={loadingGraphSteps} />
-            )
-        };
-    }
+		return {
+			'tab': <span data-tip={tooltip} className="inline-block"><i className={iconClass}/> Provenance</span>,
+			'key': 'graph-section',
+			'disabled': !Array.isArray(steps) || steps.length === 0,
+			'content': (
+				<FileViewGraphSection {...props} {..._.pick(state, 'steps', 'mounted', 'allRuns')} width={width}
+									  key={"graph-for-" + context.uuid} onToggleAllRuns={onToggleAllRuns}
+									  loading={loadingGraphSteps}/>
+			)
+		};
+	}
 
-    static isNodeDisabled(node){
-        if (node.nodeType === 'step') return false;
-        if (WorkflowNodeElement.doesRunDataExist(node)) return false;
-        return true;
-    }
+	static isNodeDisabled(node) {
+		if (node.nodeType === 'step') return false;
+		if (WorkflowNodeElement.doesRunDataExist(node)) return false;
+		return true;
+	}
 
-    static isNodeCurrentContext(node, context){
-        if (node.nodeType !== 'input' && node.nodeType !== 'output') return false;
-        return (
-            context && typeof context.accession === 'string' && node.meta.run_data && node.meta.run_data.file
-            && typeof node.meta.run_data.file !== 'string' && !Array.isArray(node.meta.run_data.file)
-            && typeof node.meta.run_data.file.accession === 'string'
-            && node.meta.run_data.file.accession === context.accession
-        ) || false;
-    }
+	static isNodeCurrentContext(node, context) {
+		if (node.nodeType !== 'input' && node.nodeType !== 'output') return false;
+		return (
+			context && typeof context.accession === 'string' && node.meta.run_data && node.meta.run_data.file
+			&& typeof node.meta.run_data.file !== 'string' && !Array.isArray(node.meta.run_data.file)
+			&& typeof node.meta.run_data.file.accession === 'string'
+			&& node.meta.run_data.file.accession === context.accession
+		) || false;
+	}
 
-    constructor(props){
-        super(props);
-        this.commonGraphProps           = this.commonGraphProps.bind(this);
-        this.onToggleIndirectFiles      = _.throttle(this.onToggleIndirectFiles.bind(this), 250);
-        this.onToggleReferenceFiles     = _.throttle(this.onToggleReferenceFiles.bind(this), 250);
-        this.onToggleAllRuns            = _.throttle(this.onToggleAllRuns.bind(this), 1000);
-        this.isNodeCurrentContext       = this.isNodeCurrentContext.bind(this);
-        this.state = _.extend({
-            'showChart' : 'detail',
-            'showIndirectFiles' : false,
-            'showReferenceFiles' : false,
-            'rowSpacingType' : 'stacked',
-            'showParameters' : false,
-            'anyIndirectPathIONodes' : true, // Overriden
-            'anyReferenceFileNodes' : true // Overriden
-        }, checkIfIndirectOrReferenceNodesExist(props.steps));
-    }
+	constructor(props) {
+		super(props);
+		this.commonGraphProps = this.commonGraphProps.bind(this);
+		this.onToggleIndirectFiles = _.throttle(this.onToggleIndirectFiles.bind(this), 250);
+		this.onToggleReferenceFiles = _.throttle(this.onToggleReferenceFiles.bind(this), 250);
+		this.onToggleAllRuns = _.throttle(this.onToggleAllRuns.bind(this), 1000);
+		this.isNodeCurrentContext = this.isNodeCurrentContext.bind(this);
+		this.state = _.extend({
+			'showChart': 'detail',
+			'showIndirectFiles': false,
+			'showReferenceFiles': false,
+			'rowSpacingType': 'stacked',
+			'showParameters': false,
+			'anyIndirectPathIONodes': true, // Overriden
+			'anyReferenceFileNodes': true // Overriden
+		}, checkIfIndirectOrReferenceNodesExist(props.steps));
+	}
 
-    componentWillReceiveProps(nextProps){
-        if (this.props.steps !== nextProps.steps){
-            this.setState(checkIfIndirectOrReferenceNodesExist(nextProps.steps));
-        }
-    }
+	componentWillReceiveProps(nextProps) {
+		if (this.props.steps !== nextProps.steps) {
+			this.setState(checkIfIndirectOrReferenceNodesExist(nextProps.steps));
+		}
+	}
 
-    isNodeCurrentContext(node){
-        return FileViewGraphSection.isNodeCurrentContext(node, this.props.context);
-    }
+	isNodeCurrentContext(node) {
+		return FileViewGraphSection.isNodeCurrentContext(node, this.props.context);
+	}
 
-    commonGraphProps(){
-        var { steps, allRuns } = this.props,
-            parsingOptions = _.extend(
-                {}, DEFAULT_PARSING_OPTIONS, _.pick(this.state, 'showReferenceFiles', 'showParameters', 'showIndirectFiles')
-            ),
-            legendItems = _.clone(WorkflowDetailPane.Legend.defaultProps.items),
-            graphData   = parseAnalysisSteps(steps, parsingOptions);
+	commonGraphProps() {
+		var {steps, allRuns} = this.props,
+			parsingOptions = _.extend(
+				{}, DEFAULT_PARSING_OPTIONS, _.pick(this.state, 'showReferenceFiles', 'showParameters', 'showIndirectFiles')
+			),
+			legendItems = _.clone(WorkflowDetailPane.Legend.defaultProps.items),
+			graphData = parseAnalysisSteps(steps, parsingOptions);
 
-        if (!this.state.showParameters){
-            delete legendItems['Input Parameter']; // Remove legend items which aren't relevant for this context.
-        }
+		if (!this.state.showParameters) {
+			delete legendItems['Input Parameter']; // Remove legend items which aren't relevant for this context.
+		}
 
-        this.anyGroupNodesExist = !allRuns && _.any(graphData.nodes, function(n){
-            return n.nodeType === 'input-group' || n.nodeType === 'output-group';
-        });
+		this.anyGroupNodesExist = !allRuns && _.any(graphData.nodes, function (n) {
+			return n.nodeType === 'input-group' || n.nodeType === 'output-group';
+		});
 
-        if (!this.state.showReferenceFiles || !this.state.anyReferenceFileNodes){
-            delete legendItems['Input Reference File'];
-        }
-        if (!this.anyGroupNodesExist || this.props.all_runs){
-            delete legendItems['Group of Similar Files'];
-        }
-        var fileMap = allFilesForWorkflowRunsMappedByUUID(
-            (this.props.context.workflow_run_outputs || []).concat(this.props.context.workflow_run_inputs || [])
-        );
-        var nodes = mapEmbeddedFilesToStepRunDataIDs( graphData.nodes, fileMap );
+		if (!this.state.showReferenceFiles || !this.state.anyReferenceFileNodes) {
+			delete legendItems['Input Reference File'];
+		}
+		if (!this.anyGroupNodesExist || this.props.all_runs) {
+			delete legendItems['Group of Similar Files'];
+		}
+		var fileMap = allFilesForWorkflowRunsMappedByUUID(
+			(this.props.context.workflow_run_outputs || []).concat(this.props.context.workflow_run_inputs || [])
+		);
+		var nodes = mapEmbeddedFilesToStepRunDataIDs(graphData.nodes, fileMap);
 
-        return _.extend(commonGraphPropsFromProps(_.extend({ legendItems }, this.props)), {
-            'isNodeDisabled'        : FileViewGraphSection.isNodeDisabled,
-            'nodes'                 : nodes,
-            'edges'                 : graphData.edges,
-            'columnSpacing'         : 100, //graphData.edges.length > 40 ? (graphData.edges.length > 80 ? 270 : 180) : 90,
-            'rowSpacingType'        : this.state.rowSpacingType,
-            'isNodeCurrentContext'  : (typeof this.props.isNodeCurrentContext === 'function' && this.props.isNodeCurrentContext) || this.isNodeCurrentContext
-        });
-    }
+		return _.extend(commonGraphPropsFromProps(_.extend({legendItems}, this.props)), {
+			'isNodeDisabled': FileViewGraphSection.isNodeDisabled,
+			'nodes': nodes,
+			'edges': graphData.edges,
+			'columnSpacing': 100, //graphData.edges.length > 40 ? (graphData.edges.length > 80 ? 270 : 180) : 90,
+			'rowSpacingType': this.state.rowSpacingType,
+			'isNodeCurrentContext': (typeof this.props.isNodeCurrentContext === 'function' && this.props.isNodeCurrentContext) || this.isNodeCurrentContext
+		});
+	}
 
-    onToggleIndirectFiles(){
-        this.setState(function({ showIndirectFiles }){
-            return { "showIndirectFiles" : !showIndirectFiles };
-        });
-    }
+	onToggleIndirectFiles() {
+		this.setState(function ({showIndirectFiles}) {
+			return {"showIndirectFiles": !showIndirectFiles};
+		});
+	}
 
-    onToggleAllRuns(){
-        return this.props.onToggleAllRuns();
-    }
+	onToggleAllRuns() {
+		return this.props.onToggleAllRuns();
+	}
 
-    render(){
-        var { steps, loadingGraphSteps, isFullscreen, allRuns, loading } = this.props,
-            { showIndirectFiles, anyIndirectPathIONodes, anyReferenceFileNodes, showChart } = this.state,
-            graphProps = Array.isArray(steps) ? this.commonGraphProps() : null,
-            isReferenceFilesCheckboxDisabled = !anyReferenceFileNodes,
-            isAllRunsCheckboxDisabled = loading || (!allRuns && !this.anyGroupNodesExist ? true : false),
-            isShowMoreContextCheckboxDisabled = !showIndirectFiles && !anyIndirectPathIONodes;
+	render() {
+		var {steps, loadingGraphSteps, isFullscreen, allRuns, loading} = this.props,
+			{showIndirectFiles, anyIndirectPathIONodes, anyReferenceFileNodes, showChart} = this.state,
+			graphProps = Array.isArray(steps) ? this.commonGraphProps() : null,
+			isReferenceFilesCheckboxDisabled = !anyReferenceFileNodes,
+			isAllRunsCheckboxDisabled = loading || (!allRuns && !this.anyGroupNodesExist ? true : false),
+			isShowMoreContextCheckboxDisabled = !showIndirectFiles && !anyIndirectPathIONodes;
 
-        return (
-            <div className={"tabview-container-fullscreen-capable workflow-view-container workflow-viewing-" + (showChart) + (isFullscreen ? ' full-screen-view' : '')}>
-                <h3 className="tab-section-title">
-                    <span>Graph</span>
-                    <WorkflowGraphSectionControls
-                        {...this.state} {..._.pick(this.props, 'allRuns', 'onToggleAllRuns', 'windowWidth', 'isFullscreen')}
-                        enabledControls={['referenceFilesCheckbox', 'indirectFilesCheckbox', 'allRunsCheckbox', 'rowSpacingTypeDropdown']}
-                        loading={loadingGraphSteps}
-                        onToggleReferenceFiles={this.onToggleReferenceFiles} onToggleIndirectFiles={this.onToggleIndirectFiles}
-                        onChangeRowSpacingType={this.onChangeRowSpacingType} onToggleFullScreenView={this.onToggleFullScreenView} onToggleShowParameters={this.onToggleShowParameters}
-                        isAllRunsCheckboxDisabled={isAllRunsCheckboxDisabled} isShowMoreContextCheckboxDisabled={isShowMoreContextCheckboxDisabled} isReferenceFilesCheckboxDisabled={isReferenceFilesCheckboxDisabled} />
-                </h3>
-                <hr className="tab-section-title-horiz-divider"/>
-                <div className="graph-wrapper" style={{ opacity : this.props.loading ? 0.33 : 1 }}>
-                    { graphProps ? <Graph { ...graphProps } /> : null }
-                </div>
-            </div>
-        );
+		return (
+			<div
+				className={"tabview-container-fullscreen-capable workflow-view-container workflow-viewing-" + (showChart) + (isFullscreen ? ' full-screen-view' : '')}>
+				<h3 className="tab-section-title">
+					<span>Graph</span>
+					<WorkflowGraphSectionControls
+						{...this.state} {..._.pick(this.props, 'allRuns', 'onToggleAllRuns', 'windowWidth', 'isFullscreen')}
+						enabledControls={['referenceFilesCheckbox', 'indirectFilesCheckbox', 'allRunsCheckbox', 'rowSpacingTypeDropdown']}
+						loading={loadingGraphSteps}
+						onToggleReferenceFiles={this.onToggleReferenceFiles}
+						onToggleIndirectFiles={this.onToggleIndirectFiles}
+						onChangeRowSpacingType={this.onChangeRowSpacingType}
+						onToggleFullScreenView={this.onToggleFullScreenView}
+						onToggleShowParameters={this.onToggleShowParameters}
+						isAllRunsCheckboxDisabled={isAllRunsCheckboxDisabled}
+						isShowMoreContextCheckboxDisabled={isShowMoreContextCheckboxDisabled}
+						isReferenceFilesCheckboxDisabled={isReferenceFilesCheckboxDisabled}/>
+				</h3>
+				<hr className="tab-section-title-horiz-divider"/>
+				<div className="graph-wrapper" style={{opacity: this.props.loading ? 0.33 : 1}}>
+					{graphProps ? <Graph {...graphProps} /> : null}
+				</div>
+			</div>
+		);
 
-    }
+	}
 
 }

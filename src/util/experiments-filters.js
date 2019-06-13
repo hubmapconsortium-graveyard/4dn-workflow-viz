@@ -5,7 +5,7 @@ import url from 'url';
 import queryString from 'query-string';
 import moment from 'moment';
 import * as Schemas from './Schemas';
-import { navigate } from './navigate';
+import {navigate} from './navigate';
 
 var Alerts = null; //require('./../alerts');
 var store = null;
@@ -17,11 +17,14 @@ export let getLimit = function(){ return 25; };
 */
 
 export const getters = {
-    'schemas' : null,
-    'page' : function(){ return 1; },
-    'limit' : function(){ return 25; }
+	'schemas': null,
+	'page': function () {
+		return 1;
+	},
+	'limit': function () {
+		return 25;
+	}
 };
-
 
 
 /**
@@ -43,93 +46,93 @@ export const currentExpSetFilters = contextFiltersToExpSetFilters;
  * @returns {!string} URL to remove active filter, or null if filter not currently active for provided field:term pair.
  */
 export function getUnselectHrefIfSelectedFromResponseFilters(term, facet, filters, includePathName = false) {
-    var field   = facet.field,
-        isRange = facet.aggregation_type && ['range', 'date_histogram', 'histogram'].indexOf(facet.aggregation_type) > -1,
-        i, filter, parts, retHref = '';
+	var field = facet.field,
+		isRange = facet.aggregation_type && ['range', 'date_histogram', 'histogram'].indexOf(facet.aggregation_type) > -1,
+		i, filter, parts, retHref = '';
 
-    // THE CONTENTS UNDER THIS IF CONDITION WILL CHANGE ONCE WE CREATE NEW 'RANGE' FACET COMPONENT
-    if (facet.aggregation_type && ['range', 'date_histogram', 'histogram'].indexOf(facet.aggregation_type) > -1) {
-        var toFilter, fromFilter;
+	// THE CONTENTS UNDER THIS IF CONDITION WILL CHANGE ONCE WE CREATE NEW 'RANGE' FACET COMPONENT
+	if (facet.aggregation_type && ['range', 'date_histogram', 'histogram'].indexOf(facet.aggregation_type) > -1) {
+		var toFilter, fromFilter;
 
-        if (facet.aggregation_type === 'range'){
-            toFilter    = _.findWhere(filters, { 'field' : field + '.to',   'term' : term.to });
-            fromFilter  = _.findWhere(filters, { 'field' : field + '.from', 'term' : term.from });
-        } else if (facet.aggregation_type === 'date_histogram'){
-            var interval = getDateHistogramIntervalFromFacet(facet) || 'month',
-                toDate = moment.utc(term.key);
-            toDate.add(1, interval + 's');
-            toFilter    = _.findWhere(filters, { 'field' : field + '.to',   'term' : toDate.format().slice(0,10) });
-            fromFilter  = _.findWhere(filters, { 'field' : field + '.from', 'term' : term.key });
-        } else {
-            throw new Error('Histogram not currently supported.');
-            // Todo: var interval = ....
-        }
+		if (facet.aggregation_type === 'range') {
+			toFilter = _.findWhere(filters, {'field': field + '.to', 'term': term.to});
+			fromFilter = _.findWhere(filters, {'field': field + '.from', 'term': term.from});
+		} else if (facet.aggregation_type === 'date_histogram') {
+			var interval = getDateHistogramIntervalFromFacet(facet) || 'month',
+				toDate = moment.utc(term.key);
+			toDate.add(1, interval + 's');
+			toFilter = _.findWhere(filters, {'field': field + '.to', 'term': toDate.format().slice(0, 10)});
+			fromFilter = _.findWhere(filters, {'field': field + '.from', 'term': term.key});
+		} else {
+			throw new Error('Histogram not currently supported.');
+			// Todo: var interval = ....
+		}
 
-        if (toFilter && !fromFilter){
-            parts = url.parse(toFilter['remove']);
-            if (includePathName) {
-                retHref += parts.pathname;
-            }
-            retHref += parts.search;
-            return retHref;
-        } else if (!toFilter && fromFilter){
-            parts = url.parse(fromFilter['remove']);
-            if (includePathName) {
-                retHref += parts.pathname;
-            }
-            retHref += parts.search;
-            return retHref;
-        } else if (toFilter && fromFilter){
-            var partsFrom   = url.parse(fromFilter['remove'], true),
-                partsTo     = url.parse(toFilter['remove'], true),
-                partsFromQ  = partsFrom.query,
-                partsToQ    = partsTo.query,
-                commonQs    = {};
+		if (toFilter && !fromFilter) {
+			parts = url.parse(toFilter['remove']);
+			if (includePathName) {
+				retHref += parts.pathname;
+			}
+			retHref += parts.search;
+			return retHref;
+		} else if (!toFilter && fromFilter) {
+			parts = url.parse(fromFilter['remove']);
+			if (includePathName) {
+				retHref += parts.pathname;
+			}
+			retHref += parts.search;
+			return retHref;
+		} else if (toFilter && fromFilter) {
+			var partsFrom = url.parse(fromFilter['remove'], true),
+				partsTo = url.parse(toFilter['remove'], true),
+				partsFromQ = partsFrom.query,
+				partsToQ = partsTo.query,
+				commonQs = {};
 
-            _.forEach(_.keys(partsFromQ), function(qk){
-                if (typeof partsToQ[qk] !== 'undefined'){
-                    if (Array.isArray(partsToQ[qk]) || Array.isArray(partsFromQ[qk])){
-                        var a1, a2;
-                        if (Array.isArray(partsToQ[qk])) {
-                            a1 = partsToQ[qk];
-                        } else {
-                            a1 = [partsToQ[qk]];
-                        }
-                        if (Array.isArray(partsFromQ[qk])) {
-                            a2 = partsFromQ[qk];
-                        } else {
-                            a2 = [partsFromQ[qk]];
-                        }
-                        commonQs[qk] = _.intersection(a1, a2);
-                    } else {
-                        commonQs[qk] = partsToQ[qk];
-                    }
-                }
-            });
+			_.forEach(_.keys(partsFromQ), function (qk) {
+				if (typeof partsToQ[qk] !== 'undefined') {
+					if (Array.isArray(partsToQ[qk]) || Array.isArray(partsFromQ[qk])) {
+						var a1, a2;
+						if (Array.isArray(partsToQ[qk])) {
+							a1 = partsToQ[qk];
+						} else {
+							a1 = [partsToQ[qk]];
+						}
+						if (Array.isArray(partsFromQ[qk])) {
+							a2 = partsFromQ[qk];
+						} else {
+							a2 = [partsFromQ[qk]];
+						}
+						commonQs[qk] = _.intersection(a1, a2);
+					} else {
+						commonQs[qk] = partsToQ[qk];
+					}
+				}
+			});
 
-            retHref = '?' + queryString.stringify(commonQs);
-            if (includePathName) {
-                retHref += partsFrom.pathname;
-            }
-            return retHref;
-        }
+			retHref = '?' + queryString.stringify(commonQs);
+			if (includePathName) {
+				retHref += partsFrom.pathname;
+			}
+			return retHref;
+		}
 
-    } else {
-        // Terms
-        for (i = 0; i < filters.length; i++) {
-            filter  = filters[i];
-            if (filter.field == field && filter.term == term.key) {
-                parts = url.parse(filter.remove);
-                if (includePathName) {
-                    retHref += parts.pathname;
-                }
-                retHref += parts.search;
-                return retHref;
-            }
-        }
+	} else {
+		// Terms
+		for (i = 0; i < filters.length; i++) {
+			filter = filters[i];
+			if (filter.field == field && filter.term == term.key) {
+				parts = url.parse(filter.remove);
+				if (includePathName) {
+					retHref += parts.pathname;
+				}
+				retHref += parts.search;
+				return retHref;
+			}
+		}
 
-    }
-    return null;
+	}
+	return null;
 }
 
 /**
@@ -140,27 +143,27 @@ export function getUnselectHrefIfSelectedFromResponseFilters(term, facet, filter
  * @param {string} searchBase - Original href or search base of current page.
  * @returns {string} href - Search URL.
  */
-export function buildSearchHref(field, term, searchBase){
-    var href;
+export function buildSearchHref(field, term, searchBase) {
+	var href;
 
-    var parts = url.parse(searchBase, true),
-        query = _.clone(parts.query);
+	var parts = url.parse(searchBase, true),
+		query = _.clone(parts.query);
 
-    // format multiple filters on the same field
-    if (field in query){
-        if (Array.isArray(query[field])) {
-            query[field] = query[field].concat(term);
-        } else {
-            query[field] = [query[field]].concat(term);
-        }
-    } else {
-        query[field] = term;
-    }
-    query = queryString.stringify(query);
-    parts.search = query && query.length > 0 ? ('?' + query) : '';
-    href = url.format(parts);
+	// format multiple filters on the same field
+	if (field in query) {
+		if (Array.isArray(query[field])) {
+			query[field] = query[field].concat(term);
+		} else {
+			query[field] = [query[field]].concat(term);
+		}
+	} else {
+		query[field] = term;
+	}
+	query = queryString.stringify(query);
+	parts.search = query && query.length > 0 ? ('?' + query) : '';
+	href = url.format(parts);
 
-    return href;
+	return href;
 }
 
 
@@ -176,47 +179,47 @@ export function buildSearchHref(field, term, searchBase){
  * @returns {?Object} Next expSetFilters object representation, or void if returnInsteadOfSave is false.
  */
 export function changeFilter(
-    field,
-    term,
-    expSetFilters = null,
-    callback = null,
-    returnInsteadOfSave = false,
-    href = null
-){
-    // If no expSetFilters are supplied, grab current ones from Redux store.
-    if (!expSetFilters) expSetFilters = currentExpSetFilters();
-    var browseBaseParams = navigate.getBrowseBaseParams();
+	field,
+	term,
+	expSetFilters = null,
+	callback = null,
+	returnInsteadOfSave = false,
+	href = null
+) {
+	// If no expSetFilters are supplied, grab current ones from Redux store.
+	if (!expSetFilters) expSetFilters = currentExpSetFilters();
+	var browseBaseParams = navigate.getBrowseBaseParams();
 
-    if (typeof browseBaseParams[field] === 'undefined'){
+	if (typeof browseBaseParams[field] === 'undefined') {
 
-        // store currently selected filters as a dict of sets
-        var tempObj = {};
-        var newObj = {};
+		// store currently selected filters as a dict of sets
+		var tempObj = {};
+		var newObj = {};
 
-        var expSet = expSetFilters[field] ? new Set(expSetFilters[field]) : new Set();
-        if (expSet.has(term)) {
-            // term is already present, so delete it
-            expSet.delete(term);
-        } else {
-            expSet.add(term);
-        }
-        if(expSet.size > 0){
-            tempObj[field] = expSet;
-            newObj = _.extend({}, expSetFilters, tempObj);
-        }else{ //remove key if set is empty
-            newObj = _.extend({}, expSetFilters);
-            delete newObj[field];
-        }
+		var expSet = expSetFilters[field] ? new Set(expSetFilters[field]) : new Set();
+		if (expSet.has(term)) {
+			// term is already present, so delete it
+			expSet.delete(term);
+		} else {
+			expSet.add(term);
+		}
+		if (expSet.size > 0) {
+			tempObj[field] = expSet;
+			newObj = _.extend({}, expSetFilters, tempObj);
+		} else { //remove key if set is empty
+			newObj = _.extend({}, expSetFilters);
+			delete newObj[field];
+		}
 
-        if (returnInsteadOfSave){
-            return newObj;
-        } else {
-            console.info("Saving new filters:", newObj);
-            return saveChangedFilters(newObj, href, callback);
-        }
-    } else {
-        return expSetFilters;
-    }
+		if (returnInsteadOfSave) {
+			return newObj;
+		} else {
+			console.info("Saving new filters:", newObj);
+			return saveChangedFilters(newObj, href, callback);
+		}
+	} else {
+		return expSetFilters;
+	}
 }
 
 
@@ -229,44 +232,44 @@ export function changeFilter(
  * @param {?function} [callback=null]  Callback function.
  * @returns {void}
  */
-export function saveChangedFilters(newExpSetFilters, href=null, callback=null){
-    if (!Alerts) Alerts = require('../alerts').default;
+export function saveChangedFilters(newExpSetFilters, href = null, callback = null) {
+	if (!Alerts) Alerts = require('../alerts').default;
 
-    var originalReduxState = null;
+	var originalReduxState = null;
 
-    if (!href){
-        console.warn("No HREF (3rd param) supplied, using current href from Redux store. This might be wrong depending on where we should be browsing.");
-        href = originalReduxState.href;
-    }
+	if (!href) {
+		console.warn("No HREF (3rd param) supplied, using current href from Redux store. This might be wrong depending on where we should be browsing.");
+		href = originalReduxState.href;
+	}
 
-    if (typeof href !== 'string') throw new Error("No valid href (3rd arg) supplied to saveChangedFilters: " + href);
+	if (typeof href !== 'string') throw new Error("No valid href (3rd arg) supplied to saveChangedFilters: " + href);
 
-    var newHref = filtersToHref(newExpSetFilters, href);
+	var newHref = filtersToHref(newExpSetFilters, href);
 
-    navigate(newHref, { replace : true, skipConfirmCheck: true }, (result)=>{
-        if (result && result.total === 0){
-            // No results, unset new filters.
-            Alerts.queue(Alerts.NoFilterResults); // Present an alert box informing user that their new selection is now being UNSELECTED because it returned no results.
-            navigate(originalReduxState.href, { skipRequest : true });
-        } else {
-            // Success. Remove any no result alerts.
-            Alerts.deQueue(Alerts.NoFilterResults);
-        }
-        if (typeof callback === 'function') setTimeout(callback, 0);
-    }, (err) =>{
-        // Fallback callback
-        if (err && (err.status === 404 || err.total === 0)) Alerts.queue(Alerts.NoFilterResults);
-        if (typeof callback === 'function') setTimeout(callback, 0);
-    });
+	navigate(newHref, {replace: true, skipConfirmCheck: true}, (result) => {
+		if (result && result.total === 0) {
+			// No results, unset new filters.
+			Alerts.queue(Alerts.NoFilterResults); // Present an alert box informing user that their new selection is now being UNSELECTED because it returned no results.
+			navigate(originalReduxState.href, {skipRequest: true});
+		} else {
+			// Success. Remove any no result alerts.
+			Alerts.deQueue(Alerts.NoFilterResults);
+		}
+		if (typeof callback === 'function') setTimeout(callback, 0);
+	}, (err) => {
+		// Fallback callback
+		if (err && (err.status === 404 || err.total === 0)) Alerts.queue(Alerts.NoFilterResults);
+		if (typeof callback === 'function') setTimeout(callback, 0);
+	});
 
 }
 
 
-export function getDateHistogramIntervalFromFacet(facet){
-    return (facet && facet.aggregation_definition
-        && facet.aggregation_definition.date_histogram
-        && facet.aggregation_definition.date_histogram.interval
-    );
+export function getDateHistogramIntervalFromFacet(facet) {
+	return (facet && facet.aggregation_definition
+		&& facet.aggregation_definition.date_histogram
+		&& facet.aggregation_definition.date_histogram.interval
+	);
 }
 
 
@@ -280,105 +283,105 @@ export function getDateHistogramIntervalFromFacet(facet){
  * @param {Object} props - Props from FacetList. Should have context.filters.
  * @returns {boolean}
  */
-export function determineIfTermFacetSelected(term, facet, props){
-    return !!(getUnselectHrefIfSelectedFromResponseFilters(term, facet, props.context.filters));
+export function determineIfTermFacetSelected(term, facet, props) {
+	return !!(getUnselectHrefIfSelectedFromResponseFilters(term, facet, props.context.filters));
 
-    // The below might be re-introduced ... but more likely to be removed since we'll have different 'range' Facet component.
+	// The below might be re-introduced ... but more likely to be removed since we'll have different 'range' Facet component.
 
-    /*
-    var field = facet.field || null,
-        fromFilter, fromFilterTerm, toFilter, toFilterTerm;
+	/*
+	var field = facet.field || null,
+		fromFilter, fromFilterTerm, toFilter, toFilterTerm;
 
-    if (facet.aggregation_type === 'date_histogram'){
-        // Instead of checking presense of filters here, we find earliest from and latest to and see if are within range.
+	if (facet.aggregation_type === 'date_histogram'){
+		// Instead of checking presense of filters here, we find earliest from and latest to and see if are within range.
 
-        fromFilter = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.from' }), 'term');
-        fromFilterTerm = fromFilter.length && fromFilter[0].term;
+		fromFilter = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.from' }), 'term');
+		fromFilterTerm = fromFilter.length && fromFilter[0].term;
 
-        toFilter = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.to' }), 'term').reverse();
-        toFilterTerm = toFilter.length && toFilter[0].term;
+		toFilter = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.to' }), 'term').reverse();
+		toFilterTerm = toFilter.length && toFilter[0].term;
 
-        var toDate = fromFilter && moment.utc(term.key);
-        toDate && toDate.add(1, 'months');
-        var toDateTerm = toDate.format().slice(0,10);
+		var toDate = fromFilter && moment.utc(term.key);
+		toDate && toDate.add(1, 'months');
+		var toDateTerm = toDate.format().slice(0,10);
 
-        if (fromFilterTerm && term.key >= fromFilterTerm && !toFilterTerm) return true;
-        if (!fromFilterTerm && toFilterTerm && toDateTerm <= toFilterTerm) return true;
-        if (fromFilterTerm && toFilterTerm && toDateTerm <= toFilterTerm && term.key >= fromFilterTerm) return true;
-        return false;
+		if (fromFilterTerm && term.key >= fromFilterTerm && !toFilterTerm) return true;
+		if (!fromFilterTerm && toFilterTerm && toDateTerm <= toFilterTerm) return true;
+		if (fromFilterTerm && toFilterTerm && toDateTerm <= toFilterTerm && term.key >= fromFilterTerm) return true;
+		return false;
 
-        // Check both from and to
-        //field       = facet.field || null;
-        //fromFilter  = _.findWhere(props.context.filters, { 'field' : field + '.from', 'term' : term.key });
-        //toDate      = fromFilter && moment.utc(term.key);
+		// Check both from and to
+		//field       = facet.field || null;
+		//fromFilter  = _.findWhere(props.context.filters, { 'field' : field + '.from', 'term' : term.key });
+		//toDate      = fromFilter && moment.utc(term.key);
 
-        //toDate && toDate.add(1, 'months');
-        //toFilter = toDate && _.findWhere(props.context.filters, { 'field' : field + '.to', 'term' : toDate.format().slice(0,10) });
+		//toDate && toDate.add(1, 'months');
+		//toFilter = toDate && _.findWhere(props.context.filters, { 'field' : field + '.to', 'term' : toDate.format().slice(0,10) });
 
-        //return !!(toFilter);
+		//return !!(toFilter);
 
-    } else if (facet.aggregation_type === 'range'){
-        fromFilter  = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.from' }), 'term');
-        fromFilterTerm = fromFilter.length && fromFilter[0].term;
-        toFilter    = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.to' }), 'term').reverse();
-        toFilterTerm = toFilter.length && toFilter[0].term;
+	} else if (facet.aggregation_type === 'range'){
+		fromFilter  = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.from' }), 'term');
+		fromFilterTerm = fromFilter.length && fromFilter[0].term;
+		toFilter    = _.sortBy(_.filter(props.context.filters, { 'field' : field + '.to' }), 'term').reverse();
+		toFilterTerm = toFilter.length && toFilter[0].term;
 
-        if (fromFilterTerm && term.from + '' >= fromFilterTerm && !toFilterTerm) return true;
-        if (!fromFilterTerm && toFilterTerm && term.to + '' <= toFilterTerm) return true;
-        if (fromFilterTerm && toFilterTerm && term.to + '' <= toFilterTerm && term.from + '' >= fromFilterTerm) return true;
-        return false;
+		if (fromFilterTerm && term.from + '' >= fromFilterTerm && !toFilterTerm) return true;
+		if (!fromFilterTerm && toFilterTerm && term.to + '' <= toFilterTerm) return true;
+		if (fromFilterTerm && toFilterTerm && term.to + '' <= toFilterTerm && term.from + '' >= fromFilterTerm) return true;
+		return false;
 
-        //fromFilter  = _.findWhere(props.context.filters, { 'field' : field + '.from', 'term' : term.from + '' });
-        //toFilter    = fromFilter && _.findWhere(props.context.filters, { 'field' : field + '.to', 'term' : term.to + '' });
-        //return !!(toFilter);
-    } else {
-        return !!(getUnselectHrefIfSelectedFromResponseFilters(term, facet, props.context.filters));
-    }
-    */
+		//fromFilter  = _.findWhere(props.context.filters, { 'field' : field + '.from', 'term' : term.from + '' });
+		//toFilter    = fromFilter && _.findWhere(props.context.filters, { 'field' : field + '.to', 'term' : term.to + '' });
+		//return !!(toFilter);
+	} else {
+		return !!(getUnselectHrefIfSelectedFromResponseFilters(term, facet, props.context.filters));
+	}
+	*/
 }
 
 /** @deprecated */
-export function isTermSelectedAccordingToExpSetFilters(term, field, expSetFilters = null){
-    if (!expSetFilters) expSetFilters = currentExpSetFilters(); // If no expSetFilters are supplied, get them from Redux store.
-    if (typeof expSetFilters[field] !== 'undefined' && typeof expSetFilters[field].has === 'function' && expSetFilters[field].has(term)) return true;
-    return false;
+export function isTermSelectedAccordingToExpSetFilters(term, field, expSetFilters = null) {
+	if (!expSetFilters) expSetFilters = currentExpSetFilters(); // If no expSetFilters are supplied, get them from Redux store.
+	if (typeof expSetFilters[field] !== 'undefined' && typeof expSetFilters[field].has === 'function' && expSetFilters[field].has(term)) return true;
+	return false;
 }
 
 
-export function unsetAllTermsForField(field, expSetFilters, save = true, href = null){
-    var esf = _.clone(expSetFilters);
-    delete esf[field];
-    if (save && href) return saveChangedFilters(esf, href);
-    else return esf;
+export function unsetAllTermsForField(field, expSetFilters, save = true, href = null) {
+	var esf = _.clone(expSetFilters);
+	delete esf[field];
+	if (save && href) return saveChangedFilters(esf, href);
+	else return esf;
 }
 
 
-export function transformExpSetFiltersToExpFilters(expSetFilters){
-    var expSetKeys = _.keys(expSetFilters);
-    var expFilters = {};
-    var i = 0;
-    for (i = 0; i < expSetKeys.length; i++){
-        if (expSetKeys[i].slice(0,19) === 'experiments_in_set.'){
-            expFilters[expSetKeys[i].slice(19)] = expSetFilters[expSetKeys[i]];
-        } else {
-            expFilters['experiment_sets.' + expSetKeys[i]] = expSetFilters[expSetKeys[i]];
-        }
-    }
-    return expFilters;
+export function transformExpSetFiltersToExpFilters(expSetFilters) {
+	var expSetKeys = _.keys(expSetFilters);
+	var expFilters = {};
+	var i = 0;
+	for (i = 0; i < expSetKeys.length; i++) {
+		if (expSetKeys[i].slice(0, 19) === 'experiments_in_set.') {
+			expFilters[expSetKeys[i].slice(19)] = expSetFilters[expSetKeys[i]];
+		} else {
+			expFilters['experiment_sets.' + expSetKeys[i]] = expSetFilters[expSetKeys[i]];
+		}
+	}
+	return expFilters;
 }
 
-export function transformExpSetFiltersToFileFilters(expSetFilters){
-    var expSetKeys = _.keys(expSetFilters);
-    var expFilters = {};
-    var i = 0;
-    for (i = 0; i < expSetKeys.length; i++){
-        if (expSetKeys[i].slice(0,19) === 'experiments_in_set.'){
-            expFilters['experiments.' + expSetKeys[i].slice(19)] = expSetFilters[expSetKeys[i]];
-        } else {
-            expFilters['experiments.experiment_sets.' + expSetKeys[i]] = expSetFilters[expSetKeys[i]];
-        }
-    }
-    return expFilters;
+export function transformExpSetFiltersToFileFilters(expSetFilters) {
+	var expSetKeys = _.keys(expSetFilters);
+	var expFilters = {};
+	var i = 0;
+	for (i = 0; i < expSetKeys.length; i++) {
+		if (expSetKeys[i].slice(0, 19) === 'experiments_in_set.') {
+			expFilters['experiments.' + expSetKeys[i].slice(19)] = expSetFilters[expSetKeys[i]];
+		} else {
+			expFilters['experiments.experiment_sets.' + expSetKeys[i]] = expSetFilters[expSetKeys[i]];
+		}
+	}
+	return expFilters;
 }
 
 
@@ -393,38 +396,38 @@ export function transformExpSetFiltersToFileFilters(expSetFilters){
  * @param {string} [hrefPath]           Override the /path/ in URL returned, e.g. to /browse/.
  * @returns {string} URL which can be used to request filtered results from back-end, e.g. http://localhost:8000/browse/?type=ExperimentSetReplicate&experimentset_type=replicate&from=0&limit=50&field.name=term1&field2.something=term2[...]
  */
-export function filtersToHref(expSetFilters, currentHref, sortColumn = null, sortReverse = false, hrefPath = null){
-    var baseHref = getBaseHref(currentHref, hrefPath);
+export function filtersToHref(expSetFilters, currentHref, sortColumn = null, sortReverse = false, hrefPath = null) {
+	var baseHref = getBaseHref(currentHref, hrefPath);
 
-    // Include a '?' or '&' if needed.
-    var sep = navigate.determineSeparatorChar(baseHref),
-        filterQuery = expSetFiltersToURLQuery(expSetFilters),
-        urlString = (
-            baseHref +
-            (filterQuery.length > 0 ? sep + filterQuery : '')
-        );
+	// Include a '?' or '&' if needed.
+	var sep = navigate.determineSeparatorChar(baseHref),
+		filterQuery = expSetFiltersToURLQuery(expSetFilters),
+		urlString = (
+			baseHref +
+			(filterQuery.length > 0 ? sep + filterQuery : '')
+		);
 
-    if (!sortColumn){
-        var parts = url.parse(currentHref, true);
-        if (parts.query && typeof parts.query.sort === 'string'){
-            if (parts.query.sort.charAt(0) === '-'){
-                sortReverse = true;
-                sortColumn = parts.query.sort.slice(1);
-            } else {
-                sortColumn = parts.query.sort;
-            }
-        }
-    }
+	if (!sortColumn) {
+		var parts = url.parse(currentHref, true);
+		if (parts.query && typeof parts.query.sort === 'string') {
+			if (parts.query.sort.charAt(0) === '-') {
+				sortReverse = true;
+				sortColumn = parts.query.sort.slice(1);
+			} else {
+				sortColumn = parts.query.sort;
+			}
+		}
+	}
 
-    if (typeof sortColumn === 'string'){
-        if (sortReverse){
-            urlString += ('&sort=-' + sortColumn);
-        } else {
-            urlString += ('&sort=' + sortColumn);
-        }
-    }
+	if (typeof sortColumn === 'string') {
+		if (sortReverse) {
+			urlString += ('&sort=-' + sortColumn);
+		} else {
+			urlString += ('&sort=' + sortColumn);
+		}
+	}
 
-    return urlString;
+	return urlString;
 }
 
 /**
@@ -432,9 +435,9 @@ export function filtersToHref(expSetFilters, currentHref, sortColumn = null, sor
  * Taken from search.py
  */
 export const NON_FILTER_URL_PARAMS = [
-    'limit', 'y.limit', 'x.limit', 'mode',
-    'format', 'frame', 'datastore', 'field', 'region', 'genome',
-    'sort', 'from', 'referrer', 'q', 'before', 'after'
+	'limit', 'y.limit', 'x.limit', 'mode',
+	'format', 'frame', 'datastore', 'field', 'region', 'genome',
+	'sort', 'from', 'referrer', 'q', 'before', 'after'
 ];
 
 
@@ -446,44 +449,44 @@ export const NON_FILTER_URL_PARAMS = [
  * @param {string} [browseBaseState] - Supply 'only_4dn' or 'all' to control which URI query params are filtered out. If 'search' is supplied, none are excluded.
  * @returns {Object} Object with fields (string, dot-separated-nested) as keys and Sets of terms (string) as values for those keys.
  */
-export function contextFiltersToExpSetFilters(contextFilters = null, browseBaseState = null){
-    if (!contextFilters){ // Grab context.filters from Redux store if not supplied.
-        var storeState = store.getState();
-        contextFilters = (storeState && storeState.context && storeState.context.filters) || null;
-    }
-    if (!Array.isArray(contextFilters)){
-        console.warn('No context filters available or supplied. Fine if this message appears outside of a /search/ or /browse/ page.');
-        return {};
-    }
-    if (contextFilters.length === 0) return {};
+export function contextFiltersToExpSetFilters(contextFilters = null, browseBaseState = null) {
+	if (!contextFilters) { // Grab context.filters from Redux store if not supplied.
+		var storeState = store.getState();
+		contextFilters = (storeState && storeState.context && storeState.context.filters) || null;
+	}
+	if (!Array.isArray(contextFilters)) {
+		console.warn('No context filters available or supplied. Fine if this message appears outside of a /search/ or /browse/ page.');
+		return {};
+	}
+	if (contextFilters.length === 0) return {};
 
-    var browseBaseParams = navigate.getBrowseBaseParams(browseBaseState);
+	var browseBaseParams = navigate.getBrowseBaseParams(browseBaseState);
 
-    return _.reduce(contextFilters, function(memo, filterObj){
-        if (typeof browseBaseParams[filterObj.field] !== 'undefined') return memo; // continue/skip.
-        if (typeof memo[filterObj.field] === 'undefined'){
-            memo[filterObj.field] = new Set([filterObj.term]);
-        } else {
-            memo[filterObj.field].add(filterObj.term);
-        }
-        return memo;
-    }, {});
+	return _.reduce(contextFilters, function (memo, filterObj) {
+		if (typeof browseBaseParams[filterObj.field] !== 'undefined') return memo; // continue/skip.
+		if (typeof memo[filterObj.field] === 'undefined') {
+			memo[filterObj.field] = new Set([filterObj.term]);
+		} else {
+			memo[filterObj.field].add(filterObj.term);
+		}
+		return memo;
+	}, {});
 }
 
 
 /** Convert expSetFilters, e.g. as stored in Redux, into a partial URL query: field.name=term1&field2.something=term2[&field3...] */
-export function expSetFiltersToURLQuery(expSetFilters){
-    return _.map(_.pairs(expSetFiltersToJSON(expSetFilters)), function([field, terms]){
-        return _.map(terms, function(t){
-            return field + '=' + encodeURIComponent(t).replace(/%20/g, "+");
-        }).join('&');
-    }).join('&');
+export function expSetFiltersToURLQuery(expSetFilters) {
+	return _.map(_.pairs(expSetFiltersToJSON(expSetFilters)), function ([field, terms]) {
+		return _.map(terms, function (t) {
+			return field + '=' + encodeURIComponent(t).replace(/%20/g, "+");
+		}).join('&');
+	}).join('&');
 }
 
-export function expSetFiltersToJSON(expSetFilters){
-    return _.object(_.map(_.pairs(expSetFilters), function([field, setOfTerms]){
-        return [field, [...setOfTerms]];
-    }));
+export function expSetFiltersToJSON(expSetFilters) {
+	return _.object(_.map(_.pairs(expSetFilters), function ([field, setOfTerms]) {
+		return [field, [...setOfTerms]];
+	}));
 }
 
 /**
@@ -494,55 +497,55 @@ export function expSetFiltersToJSON(expSetFilters){
  * @param {Object} expSetFiltersB - 2nd set of filters, same as param expSetFiltersA.
  * @returns {boolean} true if equal.
  */
-export function compareExpSetFilters(expSetFiltersA, expSetFiltersB){
-    if ((expSetFiltersA && !expSetFiltersB) || (!expSetFiltersA && expSetFiltersB)) return false;
-    var keysA = _.keys(expSetFiltersA);
-    if (keysA.length !== _.keys(expSetFiltersB).length) return false;
-    for (var i = 0; i < keysA.length; i++){
-        if (typeof expSetFiltersB[keysA[i]] === 'undefined') return false;
-        if (expSetFiltersA[keysA[i]] instanceof Set && expSetFiltersB[keysA[i]] instanceof Set){
-            if (expSetFiltersA[keysA[i]].size !== expSetFiltersB[keysA[i]].size) return false;
-            for (var termFromSetA of expSetFiltersA[keysA[i]]){
-                if (!expSetFiltersB[keysA[i]].has(termFromSetA)) return false;
-            }
-        }
-    }
-    return true;
+export function compareExpSetFilters(expSetFiltersA, expSetFiltersB) {
+	if ((expSetFiltersA && !expSetFiltersB) || (!expSetFiltersA && expSetFiltersB)) return false;
+	var keysA = _.keys(expSetFiltersA);
+	if (keysA.length !== _.keys(expSetFiltersB).length) return false;
+	for (var i = 0; i < keysA.length; i++) {
+		if (typeof expSetFiltersB[keysA[i]] === 'undefined') return false;
+		if (expSetFiltersA[keysA[i]] instanceof Set && expSetFiltersB[keysA[i]] instanceof Set) {
+			if (expSetFiltersA[keysA[i]].size !== expSetFiltersB[keysA[i]].size) return false;
+			for (var termFromSetA of expSetFiltersA[keysA[i]]) {
+				if (!expSetFiltersB[keysA[i]].has(termFromSetA)) return false;
+			}
+		}
+	}
+	return true;
 }
 
 
-export function filtersToNodes(expSetFilters = {}, orderedFieldNames = null, flatten = false){
-    // Convert orderedFieldNames into object/hash for faster lookups.
-    var sortObj = null;
-    if (Array.isArray(orderedFieldNames)) sortObj = _.invert(_.object(_.pairs(orderedFieldNames)));
+export function filtersToNodes(expSetFilters = {}, orderedFieldNames = null, flatten = false) {
+	// Convert orderedFieldNames into object/hash for faster lookups.
+	var sortObj = null;
+	if (Array.isArray(orderedFieldNames)) sortObj = _.invert(_.object(_.pairs(orderedFieldNames)));
 
-    return _(expSetFilters).chain()
-        .pairs() // fieldPair[0] = field, fieldPair[1] = Set of terms
-        .sortBy(function(fieldPair){
-            if (sortObj && typeof sortObj[fieldPair[0]] !== 'undefined') return parseInt(sortObj[fieldPair[0]]);
-            else return fieldPair[0];
-        })
-        .reduce(function(m, fieldPair){
-            var termNodes = [...fieldPair[1]].map(function(term){
-                return {
-                    'data' : {
-                        'term' : term,
-                        'name' : Schemas.Term.toName(fieldPair[0], term),
-                        'field' : fieldPair[0]
-                    }
-                };
-            });
-            if (flatten){
-                // [field1:term1, field1:term2, field1:term3, field2:term1]
-                termNodes.push('spacer');
-                return m.concat(termNodes);
-            } else {
-                // [[field1:term1, field1:term2, field1:term3],[field2:term1, field2:term2], ...]
-                m.push(termNodes);
-                return m;
-            }
-        }, [])
-        .value();
+	return _(expSetFilters).chain()
+		.pairs() // fieldPair[0] = field, fieldPair[1] = Set of terms
+		.sortBy(function (fieldPair) {
+			if (sortObj && typeof sortObj[fieldPair[0]] !== 'undefined') return parseInt(sortObj[fieldPair[0]]);
+			else return fieldPair[0];
+		})
+		.reduce(function (m, fieldPair) {
+			var termNodes = [...fieldPair[1]].map(function (term) {
+				return {
+					'data': {
+						'term': term,
+						'name': Schemas.Term.toName(fieldPair[0], term),
+						'field': fieldPair[0]
+					}
+				};
+			});
+			if (flatten) {
+				// [field1:term1, field1:term2, field1:term3, field2:term1]
+				termNodes.push('spacer');
+				return m.concat(termNodes);
+			} else {
+				// [[field1:term1, field1:term2, field1:term3],[field2:term1, field2:term2], ...]
+				m.push(termNodes);
+				return m;
+			}
+		}, [])
+		.value();
 }
 
 /**
@@ -554,73 +557,73 @@ export function filtersToNodes(expSetFilters = {}, orderedFieldNames = null, fla
  * @param {Object} expSetFilters  Object keyed by field name/key containing term key strings in form of Set or Array, which need to be converted to Set or Array.
  * @param {string} [to='array']   One of 'array' or 'set' for what to convert expSetFilter's terms to.
  */
-export function convertExpSetFiltersTerms(expSetFilters, to = 'array'){
-    return _(expSetFilters).chain()
-        .pairs()
-        .map(function(pair){
-            if (to === 'array'){
-                return [pair[0], [...pair[1]]];
-            } else if (to === 'set'){
-                return [pair[0], new Set(pair[1])];
-            }
-        })
-        .object()
-        .value();
+export function convertExpSetFiltersTerms(expSetFilters, to = 'array') {
+	return _(expSetFilters).chain()
+		.pairs()
+		.map(function (pair) {
+			if (to === 'array') {
+				return [pair[0], [...pair[1]]];
+			} else if (to === 'set') {
+				return [pair[0], new Set(pair[1])];
+			}
+		})
+		.object()
+		.value();
 }
 
 
 /** Return URL without any queries or hash, ending at pathname. Add hardcoded stuff for /browse/ or /search/ endpoints. */
-function getBaseHref(currentHref = '/browse/', hrefPath = null){
-    var urlParts = url.parse(currentHref, true);
-    if (!hrefPath){
-        hrefPath = urlParts.pathname;
-    }
+function getBaseHref(currentHref = '/browse/', hrefPath = null) {
+	var urlParts = url.parse(currentHref, true);
+	if (!hrefPath) {
+		hrefPath = urlParts.pathname;
+	}
 
-    var baseHref = (urlParts.protocol && urlParts.host) ? urlParts.protocol + '//' + urlParts.host + hrefPath : hrefPath;
-    var hrefQuery = {};
-    var hrefQueryKeys = [];
+	var baseHref = (urlParts.protocol && urlParts.host) ? urlParts.protocol + '//' + urlParts.host + hrefPath : hrefPath;
+	var hrefQuery = {};
+	var hrefQueryKeys = [];
 
-    if (navigate.isBrowseHref(hrefPath)){
-        hrefQuery = navigate.getBrowseBaseParams();
-    } else if (hrefPath.indexOf('/search/') > -1){
-        if (typeof urlParts.query.type !== 'string'){
-            hrefQuery.type = 'Item';
-        } else {
-            hrefQuery.type = urlParts.query.type;
-        }
-    }
+	if (navigate.isBrowseHref(hrefPath)) {
+		hrefQuery = navigate.getBrowseBaseParams();
+	} else if (hrefPath.indexOf('/search/') > -1) {
+		if (typeof urlParts.query.type !== 'string') {
+			hrefQuery.type = 'Item';
+		} else {
+			hrefQuery.type = urlParts.query.type;
+		}
+	}
 
-    var searchQuery = searchQueryStringFromHref(currentHref);
-    if (searchQuery) {
-        hrefQuery.q = searchQuery;
-    }
+	var searchQuery = searchQueryStringFromHref(currentHref);
+	if (searchQuery) {
+		hrefQuery.q = searchQuery;
+	}
 
-    hrefQueryKeys = _.keys(hrefQuery);
+	hrefQueryKeys = _.keys(hrefQuery);
 
-    return baseHref + (hrefQueryKeys.length > 0 ? '?' + queryString.stringify(hrefQuery) : '');
+	return baseHref + (hrefQueryKeys.length > 0 ? '?' + queryString.stringify(hrefQuery) : '');
 }
 
-export function searchQueryStringFromHref(href){
-    if (!href) return null;
-    if (typeof href !== 'string') return null;
-    var searchQueryString = null;
-    var searchQueryMatch = href.match(/(\?|&)(q)(=)[\w\s\+\-\%\.\*\!\(\)]+/);
-    if (searchQueryMatch){
-        searchQueryString = searchQueryMatch[0].replace(searchQueryMatch.slice(1).join(''), '').replace(/\+/g, ' ');
-        if (decodeURIComponent){
-            searchQueryString = decodeURIComponent(searchQueryString);
-        }
-    }
-    return searchQueryString;
+export function searchQueryStringFromHref(href) {
+	if (!href) return null;
+	if (typeof href !== 'string') return null;
+	var searchQueryString = null;
+	var searchQueryMatch = href.match(/(\?|&)(q)(=)[\w\s\+\-\%\.\*\!\(\)]+/);
+	if (searchQueryMatch) {
+		searchQueryString = searchQueryMatch[0].replace(searchQueryMatch.slice(1).join(''), '').replace(/\+/g, ' ');
+		if (decodeURIComponent) {
+			searchQueryString = decodeURIComponent(searchQueryString);
+		}
+	}
+	return searchQueryString;
 }
 
 
 /** Check whether expSetFiles exists and is empty. */
-export function filterObjExistsAndNoFiltersSelected(expSetFilters = this.props.expSetFilters){
-    return (
-        typeof expSetFilters === 'object'
-        && expSetFilters !== null
-        && _.keys(expSetFilters).length === 0
-    );
+export function filterObjExistsAndNoFiltersSelected(expSetFilters = this.props.expSetFilters) {
+	return (
+		typeof expSetFilters === 'object'
+		&& expSetFilters !== null
+		&& _.keys(expSetFilters).length === 0
+	);
 }
 

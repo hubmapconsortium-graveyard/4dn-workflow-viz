@@ -1,8 +1,8 @@
 'use strict';
 
 import React from 'react';
-import { Collapse } from 'react-bootstrap';
-import { console } from './../../util';
+import {Collapse} from 'react-bootstrap';
+import {console} from './../../util';
 
 
 /**
@@ -23,40 +23,41 @@ import { console } from './../../util';
  */
 class Row extends React.PureComponent {
 
-    constructor(props){
-        super(props);
-        this.render = this.render.bind(this);
-    }
+	constructor(props) {
+		super(props);
+		this.render = this.render.bind(this);
+	}
 
-    render(){
-        var valSm = 12 - this.props.colSm;
-        var valMd = 12 - this.props.colMd;
-        var valLg = 12 - this.props.colLg;
-        if (valSm < 3) valSm = 12;
-        if (valMd < 3) valMd = 12;
-        if (valLg < 3) valLg = 12;
-        return (
-            <div className={"row list-item " + this.props.className}>
-                <div className={"item-label col-sm-"+ this.props.colSm +" col-md-"+ this.props.colMd +" col-lg-"+ this.props.colLg}>
-                    <div className="inner">
-                        { this.props.label || this.props.title || "Label" }
-                    </div>
-                </div>
-                <div className={"item-value col-sm-"+ valSm +" col-md-"+ valMd +" col-lg-"+ valLg}>
-                    <div className="inner">
-                        { this.props.value || this.props.val || this.props.children || "Value" }
-                    </div>
-                </div>
-            </div>
-        );
-    }
+	render() {
+		var valSm = 12 - this.props.colSm;
+		var valMd = 12 - this.props.colMd;
+		var valLg = 12 - this.props.colLg;
+		if (valSm < 3) valSm = 12;
+		if (valMd < 3) valMd = 12;
+		if (valLg < 3) valLg = 12;
+		return (
+			<div className={"row list-item " + this.props.className}>
+				<div
+					className={"item-label col-sm-" + this.props.colSm + " col-md-" + this.props.colMd + " col-lg-" + this.props.colLg}>
+					<div className="inner">
+						{this.props.label || this.props.title || "Label"}
+					</div>
+				</div>
+				<div className={"item-value col-sm-" + valSm + " col-md-" + valMd + " col-lg-" + valLg}>
+					<div className="inner">
+						{this.props.value || this.props.val || this.props.children || "Value"}
+					</div>
+				</div>
+			</div>
+		);
+	}
 }
 
 Row.defaultProps = {
-    'colSm' : 12,
-    'colMd' : 4,
-    'colLg' : 4,
-    'className' : ''
+	'colSm': 12,
+	'colMd': 4,
+	'colLg': 4,
+	'className': ''
 };
 
 
@@ -72,43 +73,43 @@ Row.defaultProps = {
  * @prop {string}  className     - Class name for outermost element.
  * @prop {string}  containerType - Type of element to use as container for the two lists. Defaults to 'div'.
  */
-export class PartialList extends React.Component{
+export class PartialList extends React.Component {
 
-    static Row = Row
+	static Row = Row
 
-    constructor(props){
-        super(props);
-        this.render = this.render.bind(this);
-        if (props.open === null) this.state = { 'open' : false };
-        else this.state = null;
-    }
+	constructor(props) {
+		super(props);
+		this.render = this.render.bind(this);
+		if (props.open === null) this.state = {'open': false};
+		else this.state = null;
+	}
 
-    render(){
-        //console.log('render partial list',this.props.open, this.props.collapsible);
-        return (
-            <div className={"expandable-list " + (this.props.className || '')}>
+	render() {
+		//console.log('render partial list',this.props.open, this.props.collapsible);
+		return (
+			<div className={"expandable-list " + (this.props.className || '')}>
 
-                { React.createElement(this.props.containerType, { 'className' : this.props.containerClassName }, this.props.persistent || this.props.children) }
+				{React.createElement(this.props.containerType, {'className': this.props.containerClassName}, this.props.persistent || this.props.children)}
 
-                { this.props.collapsible.length > 0 ?
-                <Collapse in={this.props.open === null ? this.state.open : this.props.open}>
-                    <div>
-                        { React.createElement(this.props.containerType, { 'className' : this.props.containerClassName }, this.props.collapsible) }
-                    </div>
-                </Collapse>
-                : null }
-            </div>
-        );
+				{this.props.collapsible.length > 0 ?
+					<Collapse in={this.props.open === null ? this.state.open : this.props.open}>
+						<div>
+							{React.createElement(this.props.containerType, {'className': this.props.containerClassName}, this.props.collapsible)}
+						</div>
+					</Collapse>
+					: null}
+			</div>
+		);
 
-    }
+	}
 
 }
 
 PartialList.defaultProps = {
-    'className' : null,
-    'containerClassName' : null,
-    'containerType' : 'div',
-    'persistent' : [],
-    'collapsible' : [],
-    'open' : null
+	'className': null,
+	'containerClassName': null,
+	'containerType': 'div',
+	'persistent': [],
+	'collapsible': [],
+	'open': null
 };

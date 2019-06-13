@@ -2,9 +2,9 @@
 
 import _ from 'underscore';
 import React from 'react';
-import { linkFromItem } from './object';
-import { LocalizedTime, format as dateFormat } from './date-utility';
-import { itemTypeHierarchy } from './itemTypeHierarchy';
+import {linkFromItem} from './object';
+import {LocalizedTime, format as dateFormat} from './date-utility';
+import {itemTypeHierarchy} from './itemTypeHierarchy';
 
 let cachedSchemas = null;
 
@@ -13,247 +13,245 @@ let cachedSchemas = null;
  *
  * @type {function}
  */
-export function get(){
-    return cachedSchemas;
+export function get() {
+	return cachedSchemas;
 }
 
-export function set(schemas){
-    cachedSchemas = schemas;
-    return true;
+export function set(schemas) {
+	cachedSchemas = schemas;
+	return true;
 }
 
 
 export const Term = {
 
-    toName : function(field, term, allowJSXOutput = false, addDescriptionTipForLinkTos = true){
+	toName: function (field, term, allowJSXOutput = false, addDescriptionTipForLinkTos = true) {
 
-        if (allowJSXOutput && typeof term !== 'string' && term && typeof term === 'object'){
-            // Object, probably an item.
-            return linkFromItem(term, addDescriptionTipForLinkTos);
-        }
+		if (allowJSXOutput && typeof term !== 'string' && term && typeof term === 'object') {
+			// Object, probably an item.
+			return linkFromItem(term, addDescriptionTipForLinkTos);
+		}
 
-        var name = null;
+		var name = null;
 
-        switch (field) {
-            case 'experimentset_type':
-                name = Term.capitalizeSentence(term);
-                break;
-            case 'type':
-                name = getTitleForType(term);
-                break;
-            case 'status':
-                name = Term.capitalizeSentence(term);
-                break;
-            case 'date_created':
-            case 'public_release':
-            case 'project_release':
-                if (allowJSXOutput) name = <LocalizedTime timestamp={term} />;
-                else name = dateFormat(term);
-                break;
-            default:
-                name = null;
-                break;
-        }
+		switch (field) {
+			case 'experimentset_type':
+				name = Term.capitalizeSentence(term);
+				break;
+			case 'type':
+				name = getTitleForType(term);
+				break;
+			case 'status':
+				name = Term.capitalizeSentence(term);
+				break;
+			case 'date_created':
+			case 'public_release':
+			case 'project_release':
+				if (allowJSXOutput) name = <LocalizedTime timestamp={term}/>;
+				else name = dateFormat(term);
+				break;
+			default:
+				name = null;
+				break;
+		}
 
-        if (typeof name === 'string') return name;
+		if (typeof name === 'string') return name;
 
-        // Remove 'experiments_in_set' and test as if an experiment field. So can work for both ?type=Experiment, ?type=ExperimentSet.
-        field = field.replace('experiments_in_set.', '');
+		// Remove 'experiments_in_set' and test as if an experiment field. So can work for both ?type=Experiment, ?type=ExperimentSet.
+		field = field.replace('experiments_in_set.', '');
 
-        switch (field) {
-            case 'biosource_type':
-            case 'organism.name':
-            case 'individual.organism.name':
-            case 'biosource.individual.organism.name':
-            case 'biosample.biosource.individual.organism.name':
-                name = Term.capitalize(term);
-                break;
-            case 'file_type':
-            case 'file_classification':
-            case 'file_type_detailed':
-            case 'files.file_type':
-            case 'files.file_classification':
-            case 'files.file_type_detailed':
-                name = Term.capitalizeSentence(term);
-                break;
-            case 'file_size':
-                if (typeof term === 'number'){
-                    name = term;
-                } else if (!isNaN(parseInt(term))) {
-                    name = parseInt(term);
-                }
-                if (typeof name === 'number' && !isNaN(name)){
-                    name = Term.bytesToLargerUnit(name);
-                } else {
-                    name = null;
-                }
-                break;
-            case '@id':
-                name = term;
-                break;
-            default:
-                name = null;
-                break;
-        }
+		switch (field) {
+			case 'biosource_type':
+			case 'organism.name':
+			case 'individual.organism.name':
+			case 'biosource.individual.organism.name':
+			case 'biosample.biosource.individual.organism.name':
+				name = Term.capitalize(term);
+				break;
+			case 'file_type':
+			case 'file_classification':
+			case 'file_type_detailed':
+			case 'files.file_type':
+			case 'files.file_classification':
+			case 'files.file_type_detailed':
+				name = Term.capitalizeSentence(term);
+				break;
+			case 'file_size':
+				if (typeof term === 'number') {
+					name = term;
+				} else if (!isNaN(parseInt(term))) {
+					name = parseInt(term);
+				}
+				if (typeof name === 'number' && !isNaN(name)) {
+					name = Term.bytesToLargerUnit(name);
+				} else {
+					name = null;
+				}
+				break;
+			case '@id':
+				name = term;
+				break;
+			default:
+				name = null;
+				break;
+		}
 
-        // Custom stuff
-        if (field.indexOf('quality_metric.') > -1){
-            if (field.slice(-11) === 'Total reads')     return Term.roundLargeNumber(term);
-            if (field.slice(-15) === 'Total Sequences') return Term.roundLargeNumber(term);
-            if (field.slice(-14) === 'Sequence length') return Term.roundLargeNumber(term);
-            if (field.slice(-15) === 'Cis/Trans ratio') return Term.roundDecimal(term) + '%';
-            if (field.slice(-35) === '% Long-range intrachromosomal reads') return Term.roundDecimal(term) + '%';
-            if (field.slice(-4) === '.url' && term.indexOf('http') > -1) {
-                var linkTitle = Term.hrefToFilename(term); // Filename most likely for quality_metric.url case(s).
-                if (allowJSXOutput){
-                    return <a href={term} target="_blank" rel="noopener noreferrer">{ linkTitle }</a>;
-                } else {
-                    return linkTitle;
-                }
-            }
-        }
+		// Custom stuff
+		if (field.indexOf('quality_metric.') > -1) {
+			if (field.slice(-11) === 'Total reads') return Term.roundLargeNumber(term);
+			if (field.slice(-15) === 'Total Sequences') return Term.roundLargeNumber(term);
+			if (field.slice(-14) === 'Sequence length') return Term.roundLargeNumber(term);
+			if (field.slice(-15) === 'Cis/Trans ratio') return Term.roundDecimal(term) + '%';
+			if (field.slice(-35) === '% Long-range intrachromosomal reads') return Term.roundDecimal(term) + '%';
+			if (field.slice(-4) === '.url' && term.indexOf('http') > -1) {
+				var linkTitle = Term.hrefToFilename(term); // Filename most likely for quality_metric.url case(s).
+				if (allowJSXOutput) {
+					return <a href={term} target="_blank" rel="noopener noreferrer">{linkTitle}</a>;
+				} else {
+					return linkTitle;
+				}
+			}
+		}
 
-        // Fallback
-        if (typeof name !== 'string') name = term;
+		// Fallback
+		if (typeof name !== 'string') name = term;
 
-        return name;
-    },
+		return name;
+	},
 
-    capitalize : function(word)        {
-        if (typeof word !== 'string') return word;
-        return word.charAt(0).toUpperCase() + word.slice(1);
-    },
-    capitalizeSentence : function(sen) {
-        if (typeof sen !== 'string') return sen;
-        return sen.split(' ').map(Term.capitalize).join(' ');
-    },
+	capitalize: function (word) {
+		if (typeof word !== 'string') return word;
+		return word.charAt(0).toUpperCase() + word.slice(1);
+	},
+	capitalizeSentence: function (sen) {
+		if (typeof sen !== 'string') return sen;
+		return sen.split(' ').map(Term.capitalize).join(' ');
+	},
 
-    byteLevels : ['Bytes', 'kB', 'MB', 'GB', 'TB', 'Petabytes', 'Exabytes'],
+	byteLevels: ['Bytes', 'kB', 'MB', 'GB', 'TB', 'Petabytes', 'Exabytes'],
 
-    numberLevels : ['', 'k', 'm', ' billion', ' trillion', ' quadrillion', ' quintillion'],
+	numberLevels: ['', 'k', 'm', ' billion', ' trillion', ' quadrillion', ' quintillion'],
 
-    bytesToLargerUnit : function(bytes, level = 0){
-        if (bytes > 1024 && level < Term.byteLevels.length) {
-            return Term.bytesToLargerUnit(bytes / 1024, level + 1);
-        } else {
-            return (Math.round(bytes * 100) / 100) + ' ' + Term.byteLevels[level];
-        }
-    },
+	bytesToLargerUnit: function (bytes, level = 0) {
+		if (bytes > 1024 && level < Term.byteLevels.length) {
+			return Term.bytesToLargerUnit(bytes / 1024, level + 1);
+		} else {
+			return (Math.round(bytes * 100) / 100) + ' ' + Term.byteLevels[level];
+		}
+	},
 
-    roundLargeNumber : function(num, decimalPlaces = 2, level = 0){
-        if (num > 1000 && level < Term.numberLevels.length) {
-            return Term.roundLargeNumber(num / 1000, decimalPlaces, level + 1);
-        } else {
-            const multiplier = Math.pow(10, decimalPlaces);
-            return (Math.round(num * multiplier) / multiplier) + Term.numberLevels[level];
-        }
-    },
+	roundLargeNumber: function (num, decimalPlaces = 2, level = 0) {
+		if (num > 1000 && level < Term.numberLevels.length) {
+			return Term.roundLargeNumber(num / 1000, decimalPlaces, level + 1);
+		} else {
+			const multiplier = Math.pow(10, decimalPlaces);
+			return (Math.round(num * multiplier) / multiplier) + Term.numberLevels[level];
+		}
+	},
 
-    roundDecimal : function(num, decimalsVisible = 2){
-        if (isNaN(parseInt(num))) throw Error('Not a Number - ', num);
-        const multiplier = Math.pow(10, decimalsVisible);
-        return Math.round(num * multiplier) / multiplier;
-    },
+	roundDecimal: function (num, decimalsVisible = 2) {
+		if (isNaN(parseInt(num))) throw Error('Not a Number - ', num);
+		const multiplier = Math.pow(10, decimalsVisible);
+		return Math.round(num * multiplier) / multiplier;
+	},
 
-    decorateNumberWithCommas : function(num){
-        if (!num || typeof num !== 'number' || num < 1000) return num;
-        // Put full number into tooltip w. commas.
-        const chunked =  _.chunk((num + '').split('').reverse(), 3);
-        return _.map(chunked, function(c){
-            return c.reverse().join('');
-        }).reverse().join(',');
-    },
+	decorateNumberWithCommas: function (num) {
+		if (!num || typeof num !== 'number' || num < 1000) return num;
+		// Put full number into tooltip w. commas.
+		const chunked = _.chunk((num + '').split('').reverse(), 3);
+		return _.map(chunked, function (c) {
+			return c.reverse().join('');
+		}).reverse().join(',');
+	},
 
-    /** Only use where filename is expected. */
-    hrefToFilename : function(href){
-        var linkTitle = href.split('/');
-        return linkTitle = linkTitle.pop();
-    }
+	/** Only use where filename is expected. */
+	hrefToFilename: function (href) {
+		var linkTitle = href.split('/');
+		return linkTitle = linkTitle.pop();
+	}
 
 };
 
 
 export const Field = {
 
-    nameMap : {
-        'experiments_in_set.biosample.biosource.individual.organism.name' : 'Organism',
-        'accession' : 'Experiment Set',
-        'experiments_in_set.digestion_enzyme.name' : 'Enzyme',
-        'experiments_in_set.biosample.biosource_summary' : 'Biosource',
-        'experiments_in_set.lab.title' : 'Lab',
-        'experiments_in_set.experiment_type' : 'Experiment Type',
-        'experiments_in_set.experiment_type.display_title' : 'Experiment Type',
-        'experimentset_type' : 'Set Type',
-        '@id' : "Link",
-        'display_title' : "Title"
-    },
+	nameMap: {
+		'experiments_in_set.biosample.biosource.individual.organism.name': 'Organism',
+		'accession': 'Experiment Set',
+		'experiments_in_set.digestion_enzyme.name': 'Enzyme',
+		'experiments_in_set.biosample.biosource_summary': 'Biosource',
+		'experiments_in_set.lab.title': 'Lab',
+		'experiments_in_set.experiment_type': 'Experiment Type',
+		'experiments_in_set.experiment_type.display_title': 'Experiment Type',
+		'experimentset_type': 'Set Type',
+		'@id': "Link",
+		'display_title': "Title"
+	},
 
-    toName : function(field, schemas, schemaOnly = false, itemType = 'ExperimentSet'){
-        if (!schemaOnly && Field.nameMap[field]){
-            return Field.nameMap[field];
-        } else {
-            var schemaProperty = Field.getSchemaProperty(field, schemas, itemType);
-            if (schemaProperty && schemaProperty.title){
-                Field.nameMap[field] = schemaProperty.title; // Cache in nameMap for faster lookups.
-                return schemaProperty.title;
-            } else if (!schemaOnly) {
-                return field;
-            } else {
-                return null;
-            }
-        }
-    },
+	toName: function (field, schemas, schemaOnly = false, itemType = 'ExperimentSet') {
+		if (!schemaOnly && Field.nameMap[field]) {
+			return Field.nameMap[field];
+		} else {
+			var schemaProperty = Field.getSchemaProperty(field, schemas, itemType);
+			if (schemaProperty && schemaProperty.title) {
+				Field.nameMap[field] = schemaProperty.title; // Cache in nameMap for faster lookups.
+				return schemaProperty.title;
+			} else if (!schemaOnly) {
+				return field;
+			} else {
+				return null;
+			}
+		}
+	},
 
-    getSchemaProperty : function(field, schemas = null, startAt = 'ExperimentSet', skipExpFilters=false){
-        if (!schemas && !skipExpFilters) schemas = get && get();
-        var baseSchemaProperties = (schemas && schemas[startAt] && schemas[startAt].properties) || null;
-        if (!baseSchemaProperties) return null;
-        if (field.slice(0,5) === 'audit') return null;
-        var fieldParts = field.split('.');
-
-
-
-        function getNextSchemaProperties(linkToName){
-
-            function combineSchemaPropertiesFor(relatedLinkToNames){
-                return _.reduce(relatedLinkToNames, function(schemaProperties, schemaName){
-                    if (schemas[schemaName]){
-                        return _.extend(schemaProperties, schemas[schemaName].properties);
-                    }
-                    else return schemaProperties;
-                }, {});
-            }
-
-            if (typeof itemTypeHierarchy[linkToName] !== 'undefined') {
-                return combineSchemaPropertiesFor(itemTypeHierarchy[linkToName]);
-            } else {
-                return schemas[linkToName].properties;
-            }
-        }
+	getSchemaProperty: function (field, schemas = null, startAt = 'ExperimentSet', skipExpFilters = false) {
+		if (!schemas && !skipExpFilters) schemas = get && get();
+		var baseSchemaProperties = (schemas && schemas[startAt] && schemas[startAt].properties) || null;
+		if (!baseSchemaProperties) return null;
+		if (field.slice(0, 5) === 'audit') return null;
+		var fieldParts = field.split('.');
 
 
-        function getProperty(propertiesObj, fieldPartIndex){
-            var property = propertiesObj[fieldParts[fieldPartIndex]];
-            if (fieldPartIndex >= fieldParts.length - 1) return property;
-            var nextSchemaProperties = null;
-            if (property.type === 'array' && property.items && property.items.linkTo){
-                nextSchemaProperties = getNextSchemaProperties(property.items.linkTo);
-            } else if (property.type === 'array' && property.items && property.items.linkFrom){
-                nextSchemaProperties = getNextSchemaProperties(property.items.linkFrom);
-            } else if (property.linkTo) {
-                nextSchemaProperties = getNextSchemaProperties(property.linkTo);
-            } else if (property.linkFrom) {
-                nextSchemaProperties = getNextSchemaProperties(property.linkFrom);
-            } else if (property.type === 'object'){ // Embedded
-                nextSchemaProperties = property.properties;
-            }
+		function getNextSchemaProperties(linkToName) {
 
-            if (nextSchemaProperties) return getProperty(nextSchemaProperties, fieldPartIndex + 1);
-        }
+			function combineSchemaPropertiesFor(relatedLinkToNames) {
+				return _.reduce(relatedLinkToNames, function (schemaProperties, schemaName) {
+					if (schemas[schemaName]) {
+						return _.extend(schemaProperties, schemas[schemaName].properties);
+					} else return schemaProperties;
+				}, {});
+			}
 
-        return getProperty(baseSchemaProperties, 0);
+			if (typeof itemTypeHierarchy[linkToName] !== 'undefined') {
+				return combineSchemaPropertiesFor(itemTypeHierarchy[linkToName]);
+			} else {
+				return schemas[linkToName].properties;
+			}
+		}
 
-    }
+
+		function getProperty(propertiesObj, fieldPartIndex) {
+			var property = propertiesObj[fieldParts[fieldPartIndex]];
+			if (fieldPartIndex >= fieldParts.length - 1) return property;
+			var nextSchemaProperties = null;
+			if (property.type === 'array' && property.items && property.items.linkTo) {
+				nextSchemaProperties = getNextSchemaProperties(property.items.linkTo);
+			} else if (property.type === 'array' && property.items && property.items.linkFrom) {
+				nextSchemaProperties = getNextSchemaProperties(property.items.linkFrom);
+			} else if (property.linkTo) {
+				nextSchemaProperties = getNextSchemaProperties(property.linkTo);
+			} else if (property.linkFrom) {
+				nextSchemaProperties = getNextSchemaProperties(property.linkFrom);
+			} else if (property.type === 'object') { // Embedded
+				nextSchemaProperties = property.properties;
+			}
+
+			if (nextSchemaProperties) return getProperty(nextSchemaProperties, fieldPartIndex + 1);
+		}
+
+		return getProperty(baseSchemaProperties, 0);
+
+	}
 
 };
 
@@ -265,15 +263,15 @@ export const Field = {
  * @param {Item} context - Current Item or backend response JSON representation.
  * @returns {string|null} Type most relevant for current search, or `null`.
  */
-export function getSchemaTypeFromSearchContext(context){
-    var thisType = _.pluck(_.filter(context.filters || [], function(o){
-        if (o.field === 'type' && o.term !== 'Item') return true;
-        return false;
-    }), 'term')[0] || null;
-    if (thisType){
-        return getTitleForType(thisType);
-    }
-    return null;
+export function getSchemaTypeFromSearchContext(context) {
+	var thisType = _.pluck(_.filter(context.filters || [], function (o) {
+		if (o.field === 'type' && o.term !== 'Item') return true;
+		return false;
+	}), 'term')[0] || null;
+	if (thisType) {
+		return getTitleForType(thisType);
+	}
+	return null;
 }
 
 /**
@@ -284,56 +282,56 @@ export function getSchemaTypeFromSearchContext(context){
  * @param {number} [depth=0] - Current recursive depth.
  * @returns {Object} Object with period-delimited keys instead of nested value to represent nested schema structure.
  */
-export function flattenSchemaPropertyToColumnDefinition(tips, depth = 0){
-    var flattened = (
-        _.pairs(tips).filter(function(p){
-            if (p[1] && ((p[1].items && p[1].items.properties) || (p[1].properties))) return true;
-            return false;
-        }).reduce(function(m, p){
-            _.keys((p[1].items || p[1]).properties).forEach(function(childProperty){
-                if (typeof m[p[0] + '.' + childProperty] === 'undefined') {
-                    m[p[0] + '.' + childProperty] = (p[1].items || p[1]).properties[childProperty];
-                    m[p[0]] = _.omit(m[p[0]], 'items', 'properties');
-                }
-                if (!m[p[0] + '.' + childProperty].title && m[p[0] + '.' + childProperty].linkTo){ // If no Title, but yes linkTo, set Title to be Title of linkTo's Schema.
-                    m[p[0] + '.' + childProperty].title = getTitleForType(m[p[0] + '.' + childProperty].linkTo);
-                }
-                //if ( m[p[0] + '.' + childProperty].items && m[p[0] + '.' + childProperty].items.properties )
-            });
-            return m;
-        }, _.clone(tips))
-    );
+export function flattenSchemaPropertyToColumnDefinition(tips, depth = 0) {
+	var flattened = (
+		_.pairs(tips).filter(function (p) {
+			if (p[1] && ((p[1].items && p[1].items.properties) || (p[1].properties))) return true;
+			return false;
+		}).reduce(function (m, p) {
+			_.keys((p[1].items || p[1]).properties).forEach(function (childProperty) {
+				if (typeof m[p[0] + '.' + childProperty] === 'undefined') {
+					m[p[0] + '.' + childProperty] = (p[1].items || p[1]).properties[childProperty];
+					m[p[0]] = _.omit(m[p[0]], 'items', 'properties');
+				}
+				if (!m[p[0] + '.' + childProperty].title && m[p[0] + '.' + childProperty].linkTo) { // If no Title, but yes linkTo, set Title to be Title of linkTo's Schema.
+					m[p[0] + '.' + childProperty].title = getTitleForType(m[p[0] + '.' + childProperty].linkTo);
+				}
+				//if ( m[p[0] + '.' + childProperty].items && m[p[0] + '.' + childProperty].items.properties )
+			});
+			return m;
+		}, _.clone(tips))
+	);
 
-    // Recurse the result.
-    if ( // Any more nested levels?
-        depth < 4 &&
-        _.find(_.pairs(flattened), function(p){
-            if (p[1] && ((p[1].items && p[1].items.properties) || (p[1].properties))) return true;
-            return false;
-        })
-    ) flattened = flattenSchemaPropertyToColumnDefinition(flattened, depth + 1);
+	// Recurse the result.
+	if ( // Any more nested levels?
+		depth < 4 &&
+		_.find(_.pairs(flattened), function (p) {
+			if (p[1] && ((p[1].items && p[1].items.properties) || (p[1].properties))) return true;
+			return false;
+		})
+	) flattened = flattenSchemaPropertyToColumnDefinition(flattened, depth + 1);
 
-    return flattened;
+	return flattened;
 }
 
 
-export function getAbstractTypeForType(type, returnSelfIfAbstract = true){
-    var possibleParentTypes = _.keys(itemTypeHierarchy);
-    var i;
-    var foundIndex;
-    if (returnSelfIfAbstract){
-        foundIndex = possibleParentTypes.indexOf(type);
-        if ( foundIndex > -1 ){
-            return possibleParentTypes[foundIndex];
-        }
-    }
-    for (i = 0; i < possibleParentTypes.length; i++){
-        foundIndex = itemTypeHierarchy[possibleParentTypes[i]].indexOf(type);
-        if ( foundIndex > -1 ){
-            return possibleParentTypes[i];
-        }
-    }
-    return null;
+export function getAbstractTypeForType(type, returnSelfIfAbstract = true) {
+	var possibleParentTypes = _.keys(itemTypeHierarchy);
+	var i;
+	var foundIndex;
+	if (returnSelfIfAbstract) {
+		foundIndex = possibleParentTypes.indexOf(type);
+		if (foundIndex > -1) {
+			return possibleParentTypes[foundIndex];
+		}
+	}
+	for (i = 0; i < possibleParentTypes.length; i++) {
+		foundIndex = itemTypeHierarchy[possibleParentTypes[i]].indexOf(type);
+		if (foundIndex > -1) {
+			return possibleParentTypes[i];
+		}
+	}
+	return null;
 }
 
 
@@ -344,12 +342,12 @@ export function getAbstractTypeForType(type, returnSelfIfAbstract = true){
  * @param {Object} context - JSON representation of current Item.
  * @returns {string} Most specific type's name.
  */
-export function getItemType(context){
-    if (!Array.isArray(context['@type']) || context['@type'].length < 1){
-        return null;
-        //throw new Error("No @type on Item object (context).");
-    }
-    return context['@type'][0];
+export function getItemType(context) {
+	if (!Array.isArray(context['@type']) || context['@type'].length < 1) {
+		return null;
+		//throw new Error("No @type on Item object (context).");
+	}
+	return context['@type'][0];
 }
 
 
@@ -360,17 +358,17 @@ export function getItemType(context){
  * @param {string[]} context['@type] - List of types for the Item.
  * @returns {string} Base Ttem type.
  */
-export function getBaseItemType(context){
-    var types = context['@type'];
-    if (!Array.isArray(types) || types.length === 0) return null;
-    var i = 0;
-    while (i < types.length){
-        if (types[i + 1] === 'Item'){
-            return types[i]; // Last type before 'Item'.
-        }
-        i++;
-    }
-    return types[i-1]; // Fallback.
+export function getBaseItemType(context) {
+	var types = context['@type'];
+	if (!Array.isArray(types) || types.length === 0) return null;
+	var i = 0;
+	while (i < types.length) {
+		if (types[i + 1] === 'Item') {
+			return types[i]; // Last type before 'Item'.
+		}
+		i++;
+	}
+	return types[i - 1]; // Fallback.
 }
 
 
@@ -381,13 +379,13 @@ export function getBaseItemType(context){
  * @param {Object} [schemas] - Mapping of schemas, by type.
  * @returns {Object} Schema for itemType.
  */
-export function getSchemaForItemType(itemType, schemas = null){
-    if (typeof itemType !== 'string') return null;
-    if (!schemas){
-        schemas = (get && get()) || null;
-    }
-    if (!schemas) return null;
-    return schemas[itemType] || null;
+export function getSchemaForItemType(itemType, schemas = null) {
+	if (typeof itemType !== 'string') return null;
+	if (!schemas) {
+		schemas = (get && get()) || null;
+	}
+	if (!schemas) return null;
+	return schemas[itemType] || null;
 }
 
 /**
@@ -397,26 +395,26 @@ export function getSchemaForItemType(itemType, schemas = null){
  * @param {Object} [schemas=null] - Entire schemas object, e.g. as stored in App state.
  * @returns {string} Human-readable title.
  */
-export function getTitleForType(atType, schemas = null){
-    if (!atType) return null;
+export function getTitleForType(atType, schemas = null) {
+	if (!atType) return null;
 
-    // Grab schemas from Filters if we don't have them but they've been cached into there from App.
-    schemas = schemas || (get && get());
+	// Grab schemas from Filters if we don't have them but they've been cached into there from App.
+	schemas = schemas || (get && get());
 
-    if (schemas && schemas[atType] && schemas[atType].title){
-        return schemas[atType].title;
-    }
+	if (schemas && schemas[atType] && schemas[atType].title) {
+		return schemas[atType].title;
+	}
 
-    // Correct baseType to title if not in schemas.
-    // This is case for Abstract Types currently.
-    switch (atType){
-        case 'ExperimentSet':
-            return 'Experiment Set';
-        case 'UserContent':
-            return "User Content";
-        default:
-            return atType;
-    }
+	// Correct baseType to title if not in schemas.
+	// This is case for Abstract Types currently.
+	switch (atType) {
+		case 'ExperimentSet':
+			return 'Experiment Set';
+		case 'UserContent':
+			return "User Content";
+		default:
+			return atType;
+	}
 }
 
 /**
@@ -427,8 +425,8 @@ export function getTitleForType(atType, schemas = null){
  * @param {Object} [schemas=null] - Schemas object passed down from App.
  * @returns {string} Human-readable Item detailed type title.
  */
-export function getItemTypeTitle(context, schemas = null){
-    return getTitleForType(getItemType(context), schemas);
+export function getItemTypeTitle(context, schemas = null) {
+	return getTitleForType(getItemType(context), schemas);
 }
 
 /**
@@ -439,6 +437,6 @@ export function getItemTypeTitle(context, schemas = null){
  * @param {Object} [schemas=null] - Schemas object passed down from App.
  * @returns {string} Human-readable Item base type title.
  */
-export function getBaseItemTypeTitle(context, schemas = null){
-    return getTitleForType(getBaseItemType(context), schemas);
+export function getBaseItemTypeTitle(context, schemas = null) {
+	return getTitleForType(getBaseItemType(context), schemas);
 }
