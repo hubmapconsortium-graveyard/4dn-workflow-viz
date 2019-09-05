@@ -1,0 +1,24 @@
+
+/********
+COMMON SEARCH TABLE
+*********/
+
+// Outer Wrapper
+// Inner stuff (cell, row styling, etc.) is located in _tables.scss
+
+.browse-page-container {
+	margin-top: 40px;
+	&.search-page-container {
+		margin-top: 0px;
+    }
+    background-color: #fff;
+    //background-color: rgba(255,255,255,0.9);
+}
+
+
+.batch-files-download-modal {
+    > .modal-dialog {
+        min-width: 75%;
+    }
+}
+

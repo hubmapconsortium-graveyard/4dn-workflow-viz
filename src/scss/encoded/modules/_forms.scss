@@ -1,0 +1,43 @@
+/*     FORMS      */
+/* Input Fields */
+$inputBorder: #999999;
+$inputFocusBgColor: #ffffff;
+$inputFocusBorderColor: #000000;
+
+#content form {
+	margin-bottom: 1em;
+	@include clearfix;
+}
+
+.form-control {
+	padding: 4px 6px;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea, select {
+	font-family: inherit;
+	font-weight: normal;
+	font-size: inherit;
+	@include transition(all 0.15s linear);
+
+	&[disabled] { background-color: #ddd; }
+}
+
+/** Override Bootstrap defaults **/
+label {
+	font-weight: 600;
+}
+
+.form-inline,
+.navbar-form {
+	.form-control {
+		display: inline-block;
+		outline: none !important;
+		box-shadow: none;
+
+	}
+}
+
+.red {
+	border-color: red !important;
+	color: red;
+}

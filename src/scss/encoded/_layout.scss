@@ -1,0 +1,739 @@
+@charset "UTF-8";
+
+/* BASE STYLES */
+/* Note: most base styles handled by Bootstrap, with variable settings in bootstrap/_variables.scss */
+
+html {
+    font-size: $font-size-base;
+}
+
+body {
+    text-rendering: optimizeLegibility;
+    background: #f8f8f8 !important;
+    @include font-size(1rem);
+}
+
+.float-wrap { overflow: hidden; }
+
+[hidden] { display: none !important; }
+
+#slot-application {
+	height: 100%;
+    background-color: $appBackgroundColor;
+}
+
+#application {
+    height: 100%;
+    background-color: $appBackgroundColor;
+}
+
+hr { clear: both; }
+
+
+
+// Override Bootstrap's header sizes
+h1, .h1 { @include font-size(2.6rem); }
+h2, .h2 { @include font-size(2.1rem); }
+h3, .h3 { @include font-size(1.7rem); }
+h4, .h4 {
+    @include font-size(1.3rem);
+    line-height: 140%;
+}
+h5, .h5 { @include font-size(1rem); }
+h6, .h6 { @include font-size(0.85rem); }
+
+blockquote {
+    @include font-size(1rem);
+}
+
+
+*, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+
+
+#layout {
+	height: auto !important;
+    margin: 0 auto -$footer-height;
+    min-height: 100%;
+	background-color: $appBackgroundColor;
+	overflow-x: hidden;
+}
+
+.homepage-main-box {
+	min-height: 400px;
+	background: url('/static/img/encode-bg-gray.png') no-repeat center;
+}
+
+.project-info {
+	h1,h2,h3,h4 {
+		text-shadow: 1px 1px 0 #fff;
+	}
+    margin-bottom: 10px;
+	display: block;
+	@include font-size(1.3rem);
+}
+
+.text-panel {
+    margin-top: 10px;
+}
+
+
+/***********************************************************
+		HIGH-LEVEL PAGE ALIGNMENT & RELATED
+************************************************************/
+
+.static-page {
+	margin: 0;
+	margin-top: 30px;
+	&.row {
+		margin-left: -10px;
+		margin-right: -10px;
+		width: auto;
+		> div > .help-entry:first-child {
+			margin-top: 5px;
+			> .fourDN-content:first-child  > div:first-child > h2:first-child { margin-top: 20px; }
+		}
+	}
+
+	.help-entry{
+		margin: 50px 0px 50px 0px;
+	}
+
+	.help-entry:first-of-type,
+	.static-page-breadcrumbs + .help-entry {
+		margin-top: 27px;
+	}
+
+}
+
+.page-container,
+.item-page-container,
+.browse-page-container,
+.static-page {
+	/* Consistent margin between top navbar & content among pages */
+	/* margin-top: 35px; */
+}
+
+
+#content {
+
+	padding-top: 0px;
+	padding-bottom: 20px;
+	position: relative;
+
+	> .alerts {
+		margin-top: 20px;
+		.alert.no-close-button > button.close {
+			display: none;
+		}
+	}
+
+}
+
+/* top padding for small & large screens re: fixed nav */
+#pre-content-placeholder {
+	display: none;
+	height: 0px;
+
+	@include navbar-fixed-position {
+		display: block;
+		height: 81px; /* Navbar (80px inner height) + its bottom border (1px) */
+	}
+}
+
+/****** Custom Sizing for Browse Pages *******/
+/*
+body[data-pathname="/browse/"]{ 
+
+	#content.container {
+		width: auto;
+		padding-left: 30px;
+		padding-right: 30px;
+		transition: width 0s 1s;
+	}
+
+	#top-nav>nav.navbar-main>.container {
+		width: auto;
+		padding-left: 30px;
+		padding-right: 30px;
+	}
+}
+*/
+
+
+/*************** BODY STYLES RE: FULL-SCREEN THINGS ***************/
+
+body.is-full-screen {
+
+	/** Make body non-scrollable for pages which aren't search. **/
+	&:not([data-pathname="/browse/"]):not([data-pathname="/search/"]){
+		overflow: hidden;
+		&::-webkit-scrollbar { 
+			display: none; 
+		}
+	}
+
+	@include media-breakpoint-up(xl){
+		.container {
+			width: auto;
+			max-width: none;
+			margin-left: 20px;
+			margin-right: 20px;
+		}
+	}
+}
+
+
+/***********************************************************
+		HEADER & TOP AREAS (Navbar, Page Titles, etc.)
+************************************************************/
+
+
+h1.page-title {
+	/* Only set font-weight: 200 for h1,
+	   200 doesn't look as nice on smaller sizes. */
+	font-weight: 200;
+
+	// Deprecated Margins
+	margin-top: 32px;
+	margin-bottom: 32px;
+
+	&.top-of-page {
+		margin-top: 36px;
+		margin-bottom: 0px;
+		margin-left: -2px;
+		
+		body[data-pathname="/"] &,
+		body[data-pathname="/home"] &,
+		&.home-page-title {
+			//@include media-breakpoint-up(xl){
+			@include navbar-fixed-position {
+				height: 64px;
+				//height: 70px;
+				//margin-bottom: 1px;
+				//padding-top: 5px;
+			}
+
+			.subtitle {
+				font-size: 1.7rem;
+			}
+		}
+		
+	}
+
+	.row > & {
+		margin-top: 0px; // Assuming 35px margin bottom on page sub-container
+	}
+
+	.row > div > & {
+		margin-top: 0px;
+	}
+
+	.title {
+		&.has-callout-title {
+			/* margin-right: 12px; */
+		}
+
+		@include media-breakpoint-up(md){
+			margin-right: 9px;
+		}
+
+	}
+
+	.page-subtitle {
+		margin-left: 2px;
+		margin-top: 0px;
+		font-size: 18px;
+		//padding-bottom: 10px;
+		> .subtitle-prepend {
+			margin-right: 8px;
+			&.border-right {
+				padding-right : 8px;
+				border-right: 1px solid #ddd;
+			}
+		}
+	}
+
+	.subtitle {
+		/* Subtitles which are part of the title, e.g. Experiment Set <.subtitle>4324ADADF</.subtitle> */
+
+		&.prominent {
+			font-weight: 400;
+			font-size : 0.75em;
+			display: inline-block;
+			vertical-align: middle;
+
+			@include media-breakpoint-down(sm){
+				display: block;
+			}
+
+		}
+
+	}
+
+}
+
+h1.page-title + .page-subtitle {
+	margin-top: -27px; /* Assumes h1.page-title to have margin-bottom: 32px */
+	margin-bottom: 15px;
+}
+
+.page-subtitle {
+	font-weight: 400;
+}
+
+
+
+/* *********************************************************
+		FOOTER
+********************************************************** */
+
+.page-footer {
+	background-color: #f8f8f8;
+	//line-height: 0;
+	text-align: center;
+	overflow: hidden;
+	border-top: 1px solid #f0f0f0;
+	//@include filter-gradient(#ffffff, #f8f8f8, vertical);
+
+
+	a {
+		color: #bfbfbf;
+	}
+	ul {
+	    list-style: none;
+	    list-style-position: outside;
+	    padding: 0;
+	}
+
+	.footer-section {
+		display: block;
+		text-align: center;
+		color: #bfbfbf;
+		padding: 15px 0px 14px;
+
+		@include media-breakpoint-up(md){
+			text-align: right;
+			&.copy-notice {
+				text-align: left;
+			}
+
+			li:last-child {
+				padding-right: 0;
+			}
+		}
+
+		a {
+			color : #b0b0b0;
+		}
+
+		a:hover, a:active {
+			text-decoration: none !important;
+			color: #000000;
+		}
+	}
+
+}
+
+// make footer look good on larger screens
+// and activate sticky footer
+@include media-breakpoint-up(md){
+    .footer-row { margin-left: 0; margin-right: 0; }
+
+    #page-footer {
+        height: $footer-height;
+    }
+
+    .page-footer {
+        height: $footer-height - $appVersionHeight;
+    }
+
+    .app-version {
+        margin: 0 0 8px;
+        text-align: center;
+        display: block;
+        padding: 15px 15px;
+        text-align: left;
+    }
+
+    @include sticky-footer($footer-height, "#layout", "#layout-footer", "#page-footer");
+
+    .footer-links {
+        list-style: none outside none;
+        margin-left: -5px;
+        padding-left: 0;
+        li {
+            display: inline-block;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        a {
+            display: inline;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+        }
+        a:hover {
+            text-decoration: underline;
+            background-color: transparent;
+        }
+        a:active { background-color: transparent; }
+    }
+}
+
+
+
+
+
+/**********************************************************/
+// Flexbox temporary classes; might be able to change or
+// remove with Bootstrap 4
+
+.flexrow {
+    @extend .row;
+
+    @include media-breakpoint-up(md){
+        .flexbox & {
+            display: flex;
+        }
+    }
+}
+
+.flexcol-sm-6 {
+    @extend .col-sm-6;
+
+    @include media-breakpoint-up(md){
+        .flexbox & {
+            flex: 1 1 0px;
+            width: auto;
+        }
+    }
+}
+
+
+/***********************************************************
+		Utility/Responsive Classes
+***********************************************************/
+
+.column-margin-offset {
+	margin-left: ($grid-gutter-width / -2);
+	margin-right: -($grid-gutter-width / -2);
+}
+
+.column-padding {
+	padding-left: ($grid-gutter-width / 2);
+	padding-right : ($grid-gutter-width / 2);
+}
+
+.left { float: left; }
+.right { float: right; }
+
+
+/** This is especially useful for elements with data-tip attribute (for React Tooltip) so that tip is positioned at center. **/
+.inline-block {
+	display: inline-block;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+
+.clickable {
+	cursor: pointer;
+	> label {
+		cursor: pointer;
+	}
+}
+
+.no-user-select {
+	@include user-select(none);
+}
+
+
+.off-screen {
+	position : absolute !important;
+	left : -9999px !important;
+}
+
+#slow-load-container {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -10;
+	background-color: rgba(28,28,30,.7);
+	transform: translate3d(0,0,0);
+	opacity: 0;
+	transition: opacity .5s, z-index 0s 0.5s;
+	.inner {
+		position: absolute;
+		top: 50%;
+		margin-top:-20px;
+		left: 0;
+		right:0;
+		text-align:center;
+		color: #999;
+		> i.icon {
+			font-size: 3rem;
+		}
+	}
+	&.visible {
+		opacity: 1;
+		z-index: 100;
+		transition: opacity .25s, z-index 0s 0s;
+		.inner > i.icon {
+			-webkit-animation: fa-spin 2s infinite linear;
+    		animation: fa-spin 2s infinite linear;
+		}
+	}
+}
+
+/** Margin Classes, inspired by Swiss github-pages/jekyll template **/
+$margin-util-sizes: 0, 1, 2, 3, 4, 5, 6, 7, 8;  		// * 10px
+$margin-util-sizes-mini: 1, 2, 3, 4, 5, 6, 7, 8; 		// * 1px
+
+@each $util-size in $margin-util-sizes {
+	.mb-#{$util-size},
+	* > .mb-#{$util-size}{
+		margin-bottom : $util-size * 10px !important;
+	}
+	.mt-#{$util-size},
+	* > .mt-#{$util-size}{
+		margin-top : $util-size * 10px !important;
+	}
+
+	@each $util-mini-size in $margin-util-sizes-mini {
+		.mb-#{$util-size}#{$util-mini-size},
+		* > .mb-#{$util-size}#{$util-mini-size}{
+			margin-bottom : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+		.mt-#{$util-size}#{$util-mini-size},
+		* > .mt-#{$util-size}#{$util-mini-size}{
+			margin-top : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+	}
+
+}
+
+// Do same for padding.
+@each $util-size in $margin-util-sizes {
+	.pb-#{$util-size}, * > .pb-#{$util-size}{
+		padding-bottom : $util-size * 10px !important;
+	}
+	.pt-#{$util-size}, * > .pt-#{$util-size}{
+		padding-top : $util-size * 10px !important;
+	}
+
+	@each $util-mini-size in $margin-util-sizes-mini {
+		.pb-#{$util-size}#{$util-mini-size}, * > .pb-#{$util-size}#{$util-mini-size}{
+			padding-bottom : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+		.pmt-#{$util-size}#{$util-mini-size}, * > .pt-#{$util-size}#{$util-mini-size}{
+			padding-top : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+	}
+
+}
+
+
+// Margin left/right
+@each $util-size in $margin-util-sizes {
+	.ml-#{$util-size},
+	* > .ml-#{$util-size}{
+		margin-left : $util-size * 10px !important;
+	}
+	.mr-#{$util-size},
+	* > .mr-#{$util-size}{
+		margin-right : $util-size * 10px !important;
+	}
+
+	@each $util-mini-size in $margin-util-sizes-mini {
+		.ml-#{$util-size}#{$util-mini-size},
+		* > .ml-#{$util-size}#{$util-mini-size}{
+			margin-left : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+		.mr-#{$util-size}#{$util-mini-size},
+		* > .mr-#{$util-size}#{$util-mini-size}{
+			margin-right : ($util-size * 10px) + ($util-mini-size * 1px) !important;
+		}
+	}
+
+}
+
+
+
+/************** Common Typography ************/
+
+.text-capitalize 	{ text-transform: capitalize; } // Same class as Bootstrap (in newer version of it?)
+.text-uppercase 	{ text-transform: uppercase; }
+
+.text-100 { font-weight: 100; }
+a.text-100, button.text-100 { font-weight: 100 !important; }
+.text-200 { font-weight: 200; }
+a.text-200, button.text-200 { font-weight: 200 !important; }
+.text-300 { font-weight: 300; }
+a.text-300, button.text-300 { font-weight: 300 !important; }
+.text-400 { font-weight: 400; }
+a.text-400, button.text-400 { font-weight: 400 !important; }
+.text-500 { font-weight: 500; }
+a.text-500, button.text-500 { font-weight: 500 !important; }
+.text-600 { font-weight: 600; }
+a.text-600, button.text-600 { font-weight: 600 !important; }
+
+.text-normal { font-size: 1rem; } // Reset to default size.
+.text-small { font-size: 0.9rem; }
+.text-smaller { font-size: 0.75rem; }
+.text-medium { font-size: 15px; font-size: 15.75px; }
+.text-large { font-size: 17.5px; }
+.text-larger { font-size: 20px; line-height: 25px; }
+
+.mono-text,
+.accession {
+	font-family: $font-family-monospace;
+}
+
+.text-ellipsis-container {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.no-wrap {
+	white-space: nowrap;
+}
+
+/************** MORE BUTTON STYLES ***********/
+
+
+/*
+TODO: Re-enable for split buttons w/ specific className maybe.
+div.dropdown.btn-group {
+	.dropdown-toggle.btn {
+		padding-right: 14px;
+		> span.caret {
+			position: relative;
+			position: static;
+			top: none;
+			right: none;
+		}
+	}
+}
+*/
+
+@mixin button-no-focus-outline {
+	&:active, &:focus, &.focus, &:focus.active, &.focus:active, &.focus:focus {
+		outline: none;
+	}
+}
+
+/** Utility class to move an icon down 1px. Useful for centering vertically in buttons. */
+.shift-down-1 {
+	position: relative;
+	top: 1px;
+}
+
+
+/**************** React Tooltips (NPM: react-tooltip) overwrite of styling *********************/
+
+body .__react_component_tooltip {
+	padding: 6px 15px;
+}
+
+
+
+
+.links {
+    padding-left: 0px;
+}
+.links li{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fill-label{
+    display: block;
+    text-align: center;
+}
+.text-box {
+    padding: 12px 20px;
+    margin: 8px 0 8px;
+    box-sizing: border-box;
+    width: 70%;
+    border: 2px solid #b3b3b3 !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 14px;
+	font-family: $font-family-sans-serif;
+}
+
+.text-box:hover, .text-box:focus{
+	outline: none;
+	border: 2px solid #000000 !important;
+}
+
+.title{
+    text-align: center;
+}
+.error {
+    text-align: center;
+    color: red;
+}
+
+
+// simply used to make invisible elements
+.invis{
+	display: none !important;
+}
+
+// simply used to make hidden elements
+.placeholder{
+	visibility: hidden !important;
+}
+
+// used in item.js
+.item-icon{
+	padding-left: 4px;
+}
+
+h1, h2, h3, h4, h5, h6, td, th, span {
+	font-family: $font-family-sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, th {
+	color: #111;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 10px 0px 10px 0px;
+}
+
+//make all else use ysra
+p, input {
+	font-family: $font-family-sans-serif; //'Yrsa', serif;
+}
+
+.inline-subheader{
+	display: inline;
+	color: #999999 !important;
+}
+
+.impersonate-user{
+	display:block;
+	margin-top: 15px;
+}
+
+.impersonate-user-field{
+	width: 400px;
+	border: 2px solid #999999;
+}
