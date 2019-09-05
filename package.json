@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "@hms-dbmi-bgm/shared-portal-components": "github:4dn-dcic/shared-portal-components#0.0.1.11",
     "@babel/runtime": "^7.4.5",
     "crypto-js": "^3.1.9-1",
     "d3": "^5.9.2",
