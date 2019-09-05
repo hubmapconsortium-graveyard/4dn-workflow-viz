@@ -2,16 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import WorkflowRunView from './item-pages/WorkflowRunView';
-import WorkflowView from './item-pages/WorkflowView';
+import WorkflowRunView from './components/item-pages/WorkflowRunView';
+import WorkflowView from './components//item-pages/WorkflowView';
+import App from './App';
 
-let workflow_output = require('./static-workflow-output.json');
+let workflow_output = '';//require('./static-workflow-output.json');
 let context = {
 	'steps': workflow_output
 };
 
 ReactDOM.render(
-	<WorkflowView context={context}/>,
+	<App context={context}/>,
 	document.getElementById('root')
 );
 
