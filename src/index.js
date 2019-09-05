@@ -5,7 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import WorkflowRunView          from './item-pages/WorkflowRunView';
 import WorkflowView             from './item-pages/WorkflowView';
 
-let workflow_output = require('./static-workflow-output.json');
+let workflow_output = '';//require('./static-workflow-output.json');
 let context = {
 	'steps': workflow_output
 };
