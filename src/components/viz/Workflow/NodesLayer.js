@@ -6,7 +6,7 @@ import _ from 'underscore';
 import memoize from 'memoize-one';
 import ReactTooltip from 'react-tooltip';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { console } from '../../shared-portal-components/components/util';
+import { console } from '../../../shared-portal-components/components/util';
 
 import Node from './Node';
 
