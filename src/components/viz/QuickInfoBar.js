@@ -6,9 +6,9 @@ import _ from 'underscore';
 import url from 'url';
 import memoize from 'memoize-one';
 import ReactTooltip from 'react-tooltip';
-import { console, searchFilters, analytics } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, searchFilters, analytics } from '../../shared-portal-components/components/util';
 import { Filters, navigate } from '../util';
-import { Toggle } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/Toggle';
+import { Toggle } from '../../shared-portal-components/components/forms/components/Toggle';
 import { ActiveFiltersBar } from './components/ActiveFiltersBar';
 
 

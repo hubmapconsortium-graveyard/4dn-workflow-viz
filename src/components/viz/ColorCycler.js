@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { console, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, isServerSide } from '../../shared-portal-components/components/util';
 
 export class ColorCycler {
 
