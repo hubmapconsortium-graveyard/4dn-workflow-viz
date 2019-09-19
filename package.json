@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "@babel/runtime": "^7.4.5",
+    "babel-polyfill": "^6.26.0",
     "crypto-js": "^3.1.9-1",
     "d3": "^5.9.2",
     "detect-browser": "^3.0.1",
@@ -15,6 +15,7 @@
     "html-dom-parser": "^0.2.1",
     "html-react-parser": "^0.7.1",
     "js-md5": "^0.7.3",
+    "jsonwebtoken": "^8.5.1",
     "markdown-to-jsx": "^6.10.2",
     "memoize-one": "^5.0.4",
     "moment": "^2.24.0",
@@ -41,7 +42,25 @@
     "scss": "^0.2.4",
     "subprocess-middleware": "^0.1.0",
     "typescript": "^3.5.1",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "auth0-lock": "^11.17.0",
+    "aws-sdk": "^2.421.0",
+    "dom-helpers": "^3.4.0",
+    "rc-progress": "^2.3.0",
+    "universal-cookie": ">=4.0.0"
+  },
+  "peerDependencies": {
+    "d3": ">=5.9.0",
+    "react": ">=16.3.0",
+    "react-dom": ">=16.3.0",
+    "react-bootstrap": "*",
+    "markdown-to-jsx": ">=6.9.3",
+    "underscore": ">=1.9.1",
+    "react-tooltip": ">=3.10.0",
+    "query-string": ">=4.3.0",
+    "moment": ">=2.24.0",
+    "form-serialize": ">=0.6.0",
+    "react-transition-group": ">=3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
