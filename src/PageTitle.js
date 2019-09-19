@@ -6,9 +6,9 @@ import _ from 'underscore';
 import url from 'url';
 import memoize from 'memoize-one';
 
-import { Alerts } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Alerts';
-import { LocalizedTime } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/LocalizedTime';
-import { console, object, JWT, layout, schemaTransforms } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Alerts } from '../../shared-portal-components/components/ui/Alerts';
+import { LocalizedTime } from '../../shared-portal-components/components/ui/LocalizedTime';
+import { console, object, JWT, layout, schemaTransforms } from '../../shared-portal-components/components/util';
 
 import { content_views } from './globals';
 import { typedefs } from './components/util';

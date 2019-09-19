@@ -1,7 +1,7 @@
 'use strict';
 
-import Registry from '@hms-dbmi-bgm/shared-portal-components/src/components/navigation/components/Registry';
-import { console, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import Registry from '../../shared-portal-components/components/navigation/components/Registry';
+import { console, isServerSide } from '../../shared-portal-components/components/util';
 
 /**
  * Registry of views for Item pages, keyed by Item type.

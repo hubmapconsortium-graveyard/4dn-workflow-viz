@@ -5,10 +5,10 @@ import * as globals from './globals';
 import ErrorPage from './components/static-pages/ErrorPage';
 import { store } from './store';
 
-import { Alerts } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Alerts';
-import { ajax, JWT, console, isServerSide, object, layout, analytics } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Alerts } from '../../shared-portal-components/components/ui/Alerts';
+import { ajax, JWT, console, isServerSide, object, layout, analytics } from '../../shared-portal-components/components/util';
 import { Schemas, SEO, typedefs, navigate } from './components/util';
-import { requestAnimationFrame as raf } from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
+import { requestAnimationFrame as raf } from '../../shared-portal-components/components/viz/utilities';
 
 import { FacetCharts } from './components/browse/components/FacetCharts';
 import { ChartDataController } from './components/viz/chart-data-controller';
