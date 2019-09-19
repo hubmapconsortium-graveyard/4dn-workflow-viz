@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import * as d3 from 'd3';
 import memoize from 'memoize-one';
-import { Fade } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Fade';
-import { console, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Fade } from '../../../shared-portal-components/components/ui/Fade';
+import { console, isServerSide } from '../../../shared-portal-components/components/util';
 
 import StateContainer from './StateContainer';
 import ScrollContainer from './ScrollContainer';

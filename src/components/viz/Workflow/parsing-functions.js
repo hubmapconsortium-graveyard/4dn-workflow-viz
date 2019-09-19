@@ -2,7 +2,7 @@
 
 import _ from 'underscore';
 import memoize from 'memoize-one';
-import { console } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console } from '../../../shared-portal-components/components/util';
 
 /** @module parsing-functions */
 

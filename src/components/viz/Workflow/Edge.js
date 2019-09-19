@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import memoize from 'memoize-one';
 import * as d3 from 'd3';
-import { console } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console } from '../../shared-portal-components/components/util';
 
 import Node from './Node';
 import { traceNodePathAndRun } from './parsing-functions';

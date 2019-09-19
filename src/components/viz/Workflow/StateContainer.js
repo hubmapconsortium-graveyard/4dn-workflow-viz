@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import url from 'url';
 import _ from 'underscore';
 import memoize from 'memoize-one';
-import { console, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, isServerSide } from '../../../shared-portal-components/components/util';
 
 
 const memoizedFindNode = memoize(function(nodes, name, nodeType, id=null){
