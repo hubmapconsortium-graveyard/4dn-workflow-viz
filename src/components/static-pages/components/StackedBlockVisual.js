@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import memoize from 'memoize-one';
 import { OverlayTrigger } from 'react-bootstrap';
-import { console, object } from '../../shared-portal-components/components/util';
+import { console, object } from '../../../shared-portal-components/components/util';
 
 
 export function groupByMultiple(objList, propertiesList){

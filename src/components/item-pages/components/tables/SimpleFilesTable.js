@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { console } from '../../../shared-portal-components//components/util';
+import { console } from '../../../../shared-portal-components/components/util';
 import { ItemPageTable, ItemPageTableIndividualUrlLoader } from './ItemPageTable';
 import { expFxn } from './../../../util';
 

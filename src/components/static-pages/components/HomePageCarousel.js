@@ -4,8 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 import Carousel from 'nuka-carousel';
-import { console, ajax, layout, object } from '../../shared-portal-components/components/util';
-import { BasicStaticSectionBody } from '../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
+import { console, ajax, layout, object } from '../../../shared-portal-components/components/util';
+import { BasicStaticSectionBody } from '../../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
 import { replaceString as placeholderReplacementFxn } from './../placeholders';
 
 

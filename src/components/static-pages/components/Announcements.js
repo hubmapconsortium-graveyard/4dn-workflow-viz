@@ -2,10 +2,10 @@
 
 import React from 'react';
 import _ from 'underscore';
-import { console, ajax, valueTransforms } from '../../shared-portal-components/components/util';
-import { LocalizedTime } from '../../shared-portal-components/components/ui/LocalizedTime';
-import { PartialList } from '../../shared-portal-components/components/ui/PartialList';
-import { BasicStaticSectionBody } from '../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
+import { console, ajax, valueTransforms } from '../../../shared-portal-components/components/util';
+import { LocalizedTime } from '../../../shared-portal-components/components/ui/LocalizedTime';
+import { PartialList } from '../../../shared-portal-components/components/ui/PartialList';
+import { BasicStaticSectionBody } from '../../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
 
 
 /**
