@@ -8,9 +8,9 @@ import url from 'url';
 import * as d3 from 'd3';
 import moment from 'moment';
 
-import { Checkbox } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/Checkbox';
-import { DropdownButton, DropdownItem } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/DropdownButton';
-import { console, ajax, analytics } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Checkbox } from '../../shared-portal-components/components/forms/components/Checkbox';
+import { DropdownButton, DropdownItem } from '../../shared-portal-components/components/forms/components/DropdownButton';
+import { console, ajax, analytics } from '../../shared-portal-components/components/util';
 import { navigate } from './../util';
 import {
     StatsViewController, GroupByController, GroupByDropdown, ColorScaleProvider,

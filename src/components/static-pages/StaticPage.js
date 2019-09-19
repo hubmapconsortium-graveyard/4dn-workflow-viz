@@ -6,9 +6,9 @@ import _ from 'underscore';
 import memoize from 'memoize-one';
 import { compiler } from 'markdown-to-jsx';
 
-import { MarkdownHeading } from '@hms-dbmi-bgm/shared-portal-components/src/components/static-pages/TableOfContents';
-import { console, object, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { StaticPageBase } from '@hms-dbmi-bgm/shared-portal-components/src/components/static-pages/StaticPageBase';
+import { MarkdownHeading } from '../../shared-portal-components/components/static-pages/TableOfContents';
+import { console, object, isServerSide } from '../../shared-portal-components/components/util';
+import { StaticPageBase } from '../../shared-portal-components/components/static-pages/StaticPageBase';
 
 import { CSVMatrixView, EmbeddedHiglassActions } from './components';
 import { HiGlassPlainContainer } from './../item-pages/components/HiGlass/HiGlassPlainContainer';

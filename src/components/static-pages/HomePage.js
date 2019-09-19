@@ -4,9 +4,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
-import { console } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { BasicStaticSectionBody } from '@hms-dbmi-bgm/shared-portal-components/src/components/static-pages/BasicStaticSectionBody';
-import { requestAnimationFrame } from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
+import { console } from '../../shared-portal-components/components/util';
+import { BasicStaticSectionBody } from '../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
+import { requestAnimationFrame } from '../../shared-portal-components/components/viz/utilities';
 
 import { navigate } from'./../util';
 import { Announcements, HomePageCarousel } from './components';

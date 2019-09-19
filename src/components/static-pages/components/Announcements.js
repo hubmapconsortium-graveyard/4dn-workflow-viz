@@ -2,10 +2,10 @@
 
 import React from 'react';
 import _ from 'underscore';
-import { console, ajax, valueTransforms } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { LocalizedTime } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/LocalizedTime';
-import { PartialList } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/PartialList';
-import { BasicStaticSectionBody } from '@hms-dbmi-bgm/shared-portal-components/src/components/static-pages/BasicStaticSectionBody';
+import { console, ajax, valueTransforms } from '../../shared-portal-components/components/util';
+import { LocalizedTime } from '../../shared-portal-components/components/ui/LocalizedTime';
+import { PartialList } from '../../shared-portal-components/components/ui/PartialList';
+import { BasicStaticSectionBody } from '../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
 
 
 /**
