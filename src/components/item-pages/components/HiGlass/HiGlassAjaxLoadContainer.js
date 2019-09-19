@@ -3,7 +3,7 @@
 import React from 'react';
 import _ from 'underscore';
 import memoize from 'memoize-one';
-import { console, object, ajax } from '../../../shared-portal-components//components/util';
+import { console, object, ajax } from '../../../../shared-portal-components//components/util';
 import { HiGlassPlainContainer, HiGlassLoadingIndicator } from './HiGlassPlainContainer';
 
 

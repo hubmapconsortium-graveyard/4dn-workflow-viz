@@ -8,6 +8,8 @@
  * @return {boolean} - True if processing on serverside.
  */
 export function isServerSide(){
+    
+    const SERVERSIDE=false;
     if (typeof SERVERSIDE === 'boolean'){
         return SERVERSIDE;
     }

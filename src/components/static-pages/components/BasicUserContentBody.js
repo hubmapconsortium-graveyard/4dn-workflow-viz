@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { object, analytics, isServerSide } from '../../shared-portal-components/components/util';
-import { BasicStaticSectionBody } from '../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
+import { object, analytics, isServerSide } from '../../../shared-portal-components/components/util';
+import { BasicStaticSectionBody } from '../../../shared-portal-components/components/static-pages/BasicStaticSectionBody';
 import { HiGlassAjaxLoadContainer, isHiglassViewConfigItem } from './../../item-pages/components/HiGlass';
 import { OverviewHeadingContainer } from './../../item-pages/components/OverviewHeadingContainer';
 

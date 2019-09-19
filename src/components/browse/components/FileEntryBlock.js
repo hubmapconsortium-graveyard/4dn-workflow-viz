@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import _ from 'underscore';
 
-import { StackedBlockNameLabel } from '../../shared-portal-components/components/browse/components/StackedBlockTable';
-import { IndeterminateCheckbox } from '../../shared-portal-components/components/forms/components/IndeterminateCheckbox';
-import { object, typedefs } from '../../shared-portal-components/components/util';
+import { StackedBlockNameLabel } from '../../../shared-portal-components/components/browse/components/StackedBlockTable';
+import { IndeterminateCheckbox } from '../../../shared-portal-components/components/forms/components/IndeterminateCheckbox';
+import { object, typedefs } from '../../../shared-portal-components/components/util';
 import { expFxn, Schemas } from './../../util';
 
 // eslint-disable-next-line no-unused-vars
