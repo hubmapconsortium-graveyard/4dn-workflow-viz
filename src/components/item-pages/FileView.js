@@ -6,8 +6,8 @@ import _ from 'underscore';
 import url from 'url';
 import memoize from 'memoize-one';
 
-import { isServerSide, console, object, layout, valueTransforms, commonFileUtil } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { getItemType } from '@hms-dbmi-bgm/shared-portal-components/src/components/util/schema-transforms';
+import { isServerSide, console, object, layout, valueTransforms, commonFileUtil } from '../../shared-portal-components/components/util';
+import { getItemType } from '../../shared-portal-components/components/util/schema-transforms';
 import { expFxn, Schemas, fileUtil } from './../util';
 import { store } from './../../store';
 

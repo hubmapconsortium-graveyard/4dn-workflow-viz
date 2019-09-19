@@ -4,8 +4,8 @@ import React from 'react';
 import _ from 'underscore';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
-import { object } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { ItemFooterRow } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/ItemFooterRow';
+import { object } from '../../../shared-portal-components/components/util';
+import { ItemFooterRow } from '../../../shared-portal-components/components/ui/ItemFooterRow';
 import { FormattedInfoBlock, WrappedCollapsibleList } from './FormattedInfoBlock';
 import { Publications } from './Publications';
 

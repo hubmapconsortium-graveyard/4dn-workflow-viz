@@ -4,9 +4,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
-import { Fade } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Fade';
-import { ItemDetailList } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/ItemDetailList';
-import { console, object, ajax } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Fade } from '../../../../shared-portal-components//components/ui/Fade';
+import { ItemDetailList } from '../../../../shared-portal-components//components/ui/ItemDetailList';
+import { console, object, ajax } from '../../../../shared-portal-components//components/util';
 import { WorkflowStepDetailPurposesBox, WorkflowStepTitleBox } from './StepDetailBody';
 
 function tipIfLongString(tip){

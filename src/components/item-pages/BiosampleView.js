@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
-import { console, object, layout } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, object, layout } from '../../shared-portal-components/components/util';
 
 import { ItemPageTable } from './components/tables/ItemPageTable';
 import { ExperimentSetTableTabView } from './components/tables/ExperimentSetTables';
@@ -14,7 +14,7 @@ import { IndividualItemTitle } from './BiosourceView';
 
 export default class BiosampleView extends DefaultItemView {
 
-    getTabViewContents(){
+    getTabViewContents() {
         const { context, browseBaseState } = this.props;
         const initTabs = [];
         const width = this.getTabViewWidth();
@@ -23,12 +23,12 @@ export default class BiosampleView extends DefaultItemView {
 
         const expSetTableProps = {
             ...this.props,
-            'requestHref' : (
+            'requestHref': (
                 "/browse/?type=ExperimentSetReplicate&experimentset_type=replicate&" +
                 (browseBaseState === "only_4dn" ? "award.project=4DN&" : "") +
                 "experiments_in_set.biosample.display_title=" + context.display_title
             ),
-            'title' : function(props, { totalCount }){
+            'title': function (props, { totalCount }) {
                 return (totalCount ? totalCount + ' ' : '') + "Experiment Sets";
             }
         };
@@ -41,18 +41,18 @@ export default class BiosampleView extends DefaultItemView {
 }
 
 
-function BiosourcesTable(props){
+function BiosourcesTable(props) {
     return <ItemPageTable {..._.pick(props, 'schemas', 'width', 'columns', 'results')} renderDetailPane={null} />;
 }
 BiosourcesTable.defaultProps = {
-    'columns' : {
-        "display_title" : { "title" : "Title" },
-        "biosource_type" : { "title" : "Type" },
-        "biosource_vendor" : { "title" : "Vendor" },
-        "cell_line" : { "title" : "Cell Line" },
-        "individual" : {
-            "title" : "Individual",
-            "render" : function resultVal(result, columnDefinition, props, width){
+    'columns': {
+        "display_title": { "title": "Title" },
+        "biosource_type": { "title": "Type" },
+        "biosource_vendor": { "title": "Vendor" },
+        "cell_line": { "title": "Cell Line" },
+        "individual": {
+            "title": "Individual",
+            "render": function resultVal(result, columnDefinition, props, width) {
                 if (!result || !result.individual || !object.atIdFromObject(result.individual)) return '-';
                 return <IndividualItemTitle context={result.individual} />;
             }
@@ -61,26 +61,26 @@ BiosourcesTable.defaultProps = {
 };
 
 
-function CellCultureDetailsTable(props){
+function CellCultureDetailsTable(props) {
     return <ItemPageTable {..._.pick(props, 'schemas', 'columns', 'width', 'results')} renderDetailPane={null} />;
 }
 CellCultureDetailsTable.defaultProps = {
-    'columns' : {
-        "display_title" : {
-            "title" : "Title",
-            "widthMap" : { "sm" : 200, "md" : 300, "lg" : 340 },
-            "render" : function ccdTitle(result, columnDefinition){
+    'columns': {
+        "display_title": {
+            "title": "Title",
+            "widthMap": { "sm": 200, "md": 300, "lg": 340 },
+            "render": function ccdTitle(result, columnDefinition) {
                 const resultHref = object.itemUtil.atId(result);
                 const title = result.description || result.display_title;
                 return (
-                    <a href={resultHref} className="text-ellipsis-container" data-tip={title.length > 15 ? title : null}>{ title }</a>
+                    <a href={resultHref} className="text-ellipsis-container" data-tip={title.length > 15 ? title : null}>{title}</a>
                 );
             }
         },
         //"description" : { "title" : "Description" },
-        "synchronization_stage" : { "title" : "Synchronization Stage" },
-        "culture_duration" : { "title" : "Total Days in Culture" },
-        "culture_start_date" : { "title" : "Culture Start Date", "render" : OverViewBodyItem.titleRenderPresets.local_date_time }
+        "synchronization_stage": { "title": "Synchronization Stage" },
+        "culture_duration": { "title": "Total Days in Culture" },
+        "culture_start_date": { "title": "Culture Start Date", "render": OverViewBodyItem.titleRenderPresets.local_date_time }
     }
 };
 
@@ -89,23 +89,23 @@ CellCultureDetailsTable.defaultProps = {
 
 class BiosampleViewOverview extends React.PureComponent {
 
-    static getTabObject({ context, schemas, windowWidth }, width){
+    static getTabObject({ context, schemas, windowWidth }, width) {
         return {
-            'tab' : <span><i className="icon icon-file-text icon-fw"/> Overview</span>,
-            'key' : 'overview',
-            'content' : (
+            'tab': <span><i className="icon icon-file-text icon-fw" /> Overview</span>,
+            'key': 'overview',
+            'content': (
                 <div className="overflow-hidden">
                     <h3 className="tab-section-title">
                         <span>Overview</span>
                     </h3>
-                    <hr className="tab-section-title-horiz-divider"/>
+                    <hr className="tab-section-title-horiz-divider" />
                     <BiosampleViewOverview {...{ context, schemas, width, windowWidth }} />
                 </div>
             )
         };
     }
 
-    render(){
+    render() {
         const propsToPass = _.pick(this.props, 'context', 'schemas', 'width', 'windowWidth');
         return (
             <div>
@@ -124,8 +124,8 @@ const OverViewBody = React.memo(function OverViewBody(props) {
     const { context, schemas } = props;
     const tips = object.tipsFromSchema(schemas, context);
     const commonProps = {
-        'result' : context, tips,
-        'wrapInColumn' : true,
+        'result': context, tips,
+        'wrapInColumn': true,
         //'listItemElement' : 'div',
         //'listWrapperElement' : 'div',
         //'singleItemClassName' : 'block'
@@ -149,7 +149,7 @@ const OverViewBody = React.memo(function OverViewBody(props) {
 });
 
 
-const CellCultureInfoBody = React.memo(function CellCultureInfoBody(props){
+const CellCultureInfoBody = React.memo(function CellCultureInfoBody(props) {
 
     const { context, schemas, width, windowWidth } = props;
     const cell_cultures = _.filter(context.cell_culture_details || [], object.itemUtil.atId); // Cell cultures with view permissions.
@@ -161,7 +161,7 @@ const CellCultureInfoBody = React.memo(function CellCultureInfoBody(props){
 
     let body = null;
 
-    if (cell_cultures.length === 1){
+    if (cell_cultures.length === 1) {
         body = (
             <div className="row overview-blocks">
 
@@ -188,27 +188,27 @@ const CellCultureInfoBody = React.memo(function CellCultureInfoBody(props){
             <h3 className="tab-section-title">
                 <span>Cell Culture</span>
             </h3>
-            <hr className="tab-section-title-horiz-divider"/>
-            { body }
+            <hr className="tab-section-title-horiz-divider" />
+            {body}
         </div>
     );
 
 });
 
 
-const BiosourceInfoBody = React.memo(function BiosourceInfoBody(props){
+const BiosourceInfoBody = React.memo(function BiosourceInfoBody(props) {
 
     const { context, schemas, width, windowWidth } = props;
     const biosources = _.filter(context.biosource || [], object.itemUtil.atId);
     let body = null;
     let title = null;
 
-    if (biosources.length === 0){
+    if (biosources.length === 0) {
         // Throw an error instead?
         return null;
     }
 
-    if (biosources.length === 1){
+    if (biosources.length === 1) {
         const tipsForBiosample = object.tipsFromSchema(schemas, context);
         const tipsForBiosource = object.tipsFromSchema(schemas, biosources[0]);
         title = "Biosource";
@@ -221,7 +221,7 @@ const BiosourceInfoBody = React.memo(function BiosourceInfoBody(props){
 
                 <OverViewBodyItem result={biosources[0]} tips={tipsForBiosource} property="cell_line" fallbackTitle="Cell Line Name" wrapInColumn hideIfNoValue />
 
-                <OverViewBodyItem result={biosources[0]} tips={tipsForBiosource} property="individual" fallbackTitle="Individual" wrapInColumn titleRenderFxn={function(field, val){
+                <OverViewBodyItem result={biosources[0]} tips={tipsForBiosource} property="individual" fallbackTitle="Individual" wrapInColumn titleRenderFxn={function (field, val) {
                     return <IndividualItemTitle context={val} />;
                 }} />
 
@@ -236,9 +236,9 @@ const BiosourceInfoBody = React.memo(function BiosourceInfoBody(props){
 
     return (
         <div className="mt-3">
-            <h3 className="tab-section-title">{ title }</h3>
-            <hr className="tab-section-title-horiz-divider"/>
-            { body }
+            <h3 className="tab-section-title">{title}</h3>
+            <hr className="tab-section-title-horiz-divider" />
+            {body}
         </div>
     );
 

@@ -4,8 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { console, object, ajax } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { requestAnimationFrame } from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
+import { console, object, ajax } from '../../../shared-portal-components//components/util';
+import { requestAnimationFrame } from '../../../shared-portal-components//components/viz/utilities';
 
 
 /**

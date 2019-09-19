@@ -2,8 +2,8 @@
 
 import React from 'react';
 import _ from 'underscore';
-import { console, object, valueTransforms } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { ViewFileButton } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/FileDownloadButton';
+import { console, object, valueTransforms } from '../../../shared-portal-components//components/util';
+import { ViewFileButton } from '../../../shared-portal-components//components/ui/FileDownloadButton';
 
 
 /** @todo split into functonal components */

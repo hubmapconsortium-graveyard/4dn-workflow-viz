@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 import _ from 'underscore';
 import { DropdownButton, DropdownItem, Dropdown, Button } from 'react-bootstrap';
 
-import { JWT, console, object, ajax, layout, navigate } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { Alerts } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Alerts';
-import { Collapse } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Collapse';
-import { LinkToSelector } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/LinkToSelector';
+import { JWT, console, object, ajax, layout, navigate } from '../../shared-portal-components/components/util';
+import { Alerts } from '../../shared-portal-components/components/ui/Alerts';
+import { Collapse } from '../../shared-portal-components/components/ui/Collapse';
+import { LinkToSelector } from '../../shared-portal-components/components/forms/components/LinkToSelector';
 
 import { HiGlassPlainContainer } from './components/HiGlass/HiGlassPlainContainer';
 import { CollapsibleItemViewButtonToolbar } from './components/CollapsibleItemViewButtonToolbar';

@@ -4,7 +4,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import memoize from 'memoize-one';
 import _ from 'underscore';
-import { console, object } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, object } from '../../../../shared-portal-components//components/util';
 
 
 /** @todo this can be functional components */

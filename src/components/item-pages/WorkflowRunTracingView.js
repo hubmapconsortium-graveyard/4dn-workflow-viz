@@ -4,8 +4,8 @@ import _ from 'underscore';
 import moment from 'moment';
 import ReactTooltip from 'react-tooltip';
 
-import { console, ajax } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
-import { requestAnimationFrame as raf } from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
+import { console, ajax } from '../../shared-portal-components/components/util';
+import { requestAnimationFrame as raf } from '../../shared-portal-components/components/viz/utilities';
 import { WorkflowNodeElement } from './components/WorkflowNodeElement';
 import { WorkflowDetailPane } from './components/WorkflowDetailPane';
 import { WorkflowGraphSectionControls } from './components/WorkflowGraphSectionControls';

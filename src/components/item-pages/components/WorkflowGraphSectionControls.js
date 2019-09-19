@@ -3,8 +3,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { DropdownButton, DropdownItem } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/DropdownButton';
-import { Checkbox } from '@hms-dbmi-bgm/shared-portal-components/src/components/forms/components/Checkbox';
+import { DropdownButton, DropdownItem } from '../../../shared-portal-components/components/forms/components/DropdownButton';
+import { Checkbox } from '../../../shared-portal-components/components/forms/components/Checkbox';
 import { CollapsibleItemViewButtonToolbar } from './CollapsibleItemViewButtonToolbar';
 
 

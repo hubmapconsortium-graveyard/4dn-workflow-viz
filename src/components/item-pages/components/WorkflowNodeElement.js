@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import { console, object, valueTransforms } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, object, valueTransforms } from '../../../shared-portal-components/components/util';
 import { expFxn } from './../../util';
 import { ViewMetricButton } from './WorkflowDetailPane/FileDetailBodyMetricsView';
 
