@@ -3,8 +3,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
-import * as vizUtil from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
-import { console, isServerSide, layout } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import * as vizUtil from '../../shared-portal-components/components/viz/utilities';
+import { console, isServerSide, layout } from '../../shared-portal-components/components/util';
 
 /**
  * @typedef {Object} Offset

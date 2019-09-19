@@ -4,7 +4,7 @@
 import React from 'react';
 import _ from 'underscore';
 import { barplot_color_cycler } from './../ColorCycler';
-import { console, object, isServerSide } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { console, object, isServerSide } from '../../shared-portal-components/components/util';
 // `Schemas` kept for project-specific transforms
 import { Schemas } from './../../util';
 import CursorComponent from './CursorComponent';
