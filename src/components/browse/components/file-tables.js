@@ -7,9 +7,9 @@ import _ from 'underscore';
 import memoize from 'memoize-one';
 import url from 'url';
 
-import { StackedBlockTable, StackedBlock, StackedBlockList, StackedBlockName, StackedBlockNameLabel } from '../../shared-portal-components/components/browse/components/StackedBlockTable';
-import { DropdownButton, DropdownItem } from '../../shared-portal-components/components/forms/components/DropdownButton';
-import { console, isServerSide, analytics, object, commonFileUtil, navigate } from '../../shared-portal-components/components/util';
+import { StackedBlockTable, StackedBlock, StackedBlockList, StackedBlockName, StackedBlockNameLabel } from '../../../shared-portal-components/components/browse/components/StackedBlockTable';
+import { DropdownButton, DropdownItem } from '../../../shared-portal-components/components/forms/components/DropdownButton';
+import { console, isServerSide, analytics, object, commonFileUtil, navigate } from '../../../shared-portal-components/components/util';
 
 import { FileEntryBlock, FilePairBlock, FileHeaderWithCheckbox, handleFileCheckboxChangeFxn } from './FileEntryBlock';
 import { SelectedFilesController } from './SelectedFilesController';

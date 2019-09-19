@@ -6,12 +6,12 @@ import _ from 'underscore';
 import url from 'url';
 import memoize from 'memoize-one';
 import queryString from 'querystring';
-import { object, ajax, layout, isServerSide, schemaTransforms } from '../../../shared-portal-components//components/util';
+import { object, ajax, layout, isServerSide, schemaTransforms } from '../../../../shared-portal-components//components/util';
 import {
     ResultRowColumnBlockValue, columnsToColumnDefinitions, columnDefinitionsToScaledColumnDefinitions,
     HeadersRow, TableRowToggleOpenButton
-} from '../../../shared-portal-components//components/browse/components/table-commons';
-import { SearchResultDetailPane } from '../../../shared-portal-components//components/browse/components/SearchResultDetailPane';
+} from '../../../../shared-portal-components//components/browse/components/table-commons';
+import { SearchResultDetailPane } from '../../../../shared-portal-components//components/browse/components/SearchResultDetailPane';
 
 
 /** @todo Move to shared components repo? */
