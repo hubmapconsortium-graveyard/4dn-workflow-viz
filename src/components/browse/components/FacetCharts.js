@@ -4,9 +4,9 @@ import React from 'react';
 import _ from 'underscore';
 import url from 'url';
 
-import { unhighlightTerms } from '@hms-dbmi-bgm/shared-portal-components/src/components/viz/utilities';
-import { FlexibleDescriptionBox } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/FlexibleDescriptionBox';
-import { object, layout, ajax, console, isServerSide, analytics, searchFilters } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { unhighlightTerms } from '../../shared-portal-components/components/viz/utilities';
+import { FlexibleDescriptionBox } from '../../shared-portal-components/components/ui/FlexibleDescriptionBox';
+import { object, layout, ajax, console, isServerSide, analytics, searchFilters } from '../../shared-portal-components/components/util';
 
 import { navigate } from '../../util';
 import { ChartDataController } from '../../viz/chart-data-controller';

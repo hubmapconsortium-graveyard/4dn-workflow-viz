@@ -4,9 +4,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
-import { Collapse } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/Collapse';
-import { FlexibleDescriptionBox } from '@hms-dbmi-bgm/shared-portal-components/src/components/ui/FlexibleDescriptionBox';
-import { object, layout } from '@hms-dbmi-bgm/shared-portal-components/src/components/util';
+import { Collapse } from '../../shared-portal-components/components/ui/Collapse';
+import { FlexibleDescriptionBox } from '../../shared-portal-components/components/ui/FlexibleDescriptionBox';
+import { object, layout } from '../../shared-portal-components/components/util';
 
 import { RawFilesStackedTable, ProcessedFilesStackedTable, renderFileTypeSummaryColumn } from './file-tables';
 import { expFxn } from './../../util';
