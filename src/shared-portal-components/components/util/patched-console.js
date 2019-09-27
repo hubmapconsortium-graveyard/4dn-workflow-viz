@@ -32,9 +32,9 @@ export const patchedConsoleInstance = (function(){
                 console.warn("BUILDTYPE var is not set - likely running uncompiled ES6 JS -or- compile-time issue.");
                 return true;
             }
-            if (BUILDTYPE === "production") {
+           /*  if (BUILDTYPE === "production") {
                 return false;
-            }
+            } */
             return true;
         };
 
