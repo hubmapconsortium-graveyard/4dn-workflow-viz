@@ -1,4 +1,3 @@
-var CryptoJS = require('crypto-js');
 import _ from 'underscore';
 import memoize from 'memoize-one';
 import { itemUtil } from './object';
@@ -7,7 +6,7 @@ import { patchedConsoleInstance as console } from './patched-console';
 
 import { File } from './typedefs';
 
-
+let CryptoJS = require('crypto-js');
 
 /** WE WILL REMOVE MOST FUNCS FROM HERE THAT ARENT REUSABLE & KEEP REST IN PROJ-SPECIFIC REPOS */
 
@@ -70,7 +69,7 @@ export function groupFilesByRelations(files, isBidirectional=true){
     const ungroupedFiles = files.slice(0);
     const encounteredIDs = new Set();
 
-    var currGroup       = [ ungroupedFiles.shift() ],
+    let currGroup       = [ ungroupedFiles.shift() ],
         currGroupIdx    = 0,
         currFile, currFileID, ungroupedIter, anotherUngroupedFile;
 
@@ -173,7 +172,7 @@ export function extractSinglyGroupedItems(groups){
  * @returns {File[]|true} Filtered list of files or boolean for "any", depending on `checkAny` param.
  */
 export const filterFilesWithEmbeddedMetricItem = memoize(function(files, checkAny=false){
-    var func = checkAny ? _.any : _.filter;
+    let func = checkAny ? _.any : _.filter;
     return func(files, function(f){
         return f.quality_metric && f.quality_metric.overall_quality_status;
     });
@@ -181,7 +180,7 @@ export const filterFilesWithEmbeddedMetricItem = memoize(function(files, checkAn
 
 
 export const filterFilesWithQCSummary = memoize(function(files, checkAny=false){
-    var func = checkAny ? _.any : _.filter;
+    let func = checkAny ? _.any : _.filter;
     return func(files, function(f){
         return (
             Array.isArray(f.quality_metric_summary) &&
@@ -222,7 +221,7 @@ export const groupFilesByQCSummaryTitles = memoize(function(filesWithMetrics, se
 
 
 export function isFilenameAnImage(filename, suppressErrors = false){
-    var fileNameLower, fileNameLowerEnds;
+    let fileNameLower, fileNameLowerEnds;
     if (typeof filename === 'string'){
         fileNameLower = (filename && filename.length > 0 && filename.toLowerCase()) || '';
         // Store ending(s) into object so we don't have to call `fileNameLower.slice` per each comparison.
@@ -259,28 +258,28 @@ export function isFilenameAnImage(filename, suppressErrors = false){
  * Solution originally: https://groups.google.com/forum/#!msg/crypto-js/TOb92tcJlU0/Eq7VZ5tpi-QJ
  */
 function arrayBufferToWordArray(ab) {
-    var i8a = new Uint8Array(ab);
-    var a = [];
-    for (var i = 0; i < i8a.length; i += 4) {
+    let i8a = new Uint8Array(ab);
+    let a = [];
+    for (let i = 0; i < i8a.length; i += 4) {
         a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3]);
     }
     // WordArrays are UTF8 by default
-    var result = CryptoJS.lib.WordArray.create(a, i8a.length);
+    let result = CryptoJS.lib.WordArray.create(a, i8a.length);
     return [result, i8a.length];
 }
 
 function readChunked(file, chunkCallback, endCallback) {
-    var fileSize = file.size;
-    var chunkSize = 4 * 1024 * 1024; // 4MB chunks
-    var offset = 0;
+    let fileSize = file.size;
+    let chunkSize = 4 * 1024 * 1024; // 4MB chunks
+    let offset = 0;
 
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = function() {
         if (reader.error) {
             endCallback(reader.error || {});
             return;
         }
-        var wordArrayRes = arrayBufferToWordArray(reader.result);
+        let wordArrayRes = arrayBufferToWordArray(reader.result);
         offset += wordArrayRes[1];
         // callback for handling read chunk
         chunkCallback(wordArrayRes[0], offset, fileSize);
@@ -296,7 +295,7 @@ function readChunked(file, chunkCallback, endCallback) {
     };
 
     function readNext() {
-        var fileSlice = file.slice(offset, offset + chunkSize);
+        let fileSlice = file.slice(offset, offset + chunkSize);
         reader.readAsArrayBuffer(fileSlice);
     }
     readNext();
@@ -313,7 +312,7 @@ function readChunked(file, chunkCallback, endCallback) {
 export function getLargeMD5(file, cbProgress) {
     return new Promise((resolve, reject) => {
         // create algorithm for progressive hashing
-        var md5 = CryptoJS.algo.MD5.create();
+        let md5 = CryptoJS.algo.MD5.create();
         readChunked(
             file,
             function(chunk, offs, total){
@@ -326,8 +325,8 @@ export function getLargeMD5(file, cbProgress) {
                 if (err) {
                     reject(err);
                 } else {
-                    var hash = md5.finalize();
-                    var hashHex = hash.toString(CryptoJS.enc.Hex);
+                    let hash = md5.finalize();
+                    let hashHex = hash.toString(CryptoJS.enc.Hex);
                     resolve(hashHex);
                 }
             }
