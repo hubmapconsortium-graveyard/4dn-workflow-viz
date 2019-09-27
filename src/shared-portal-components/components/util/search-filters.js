@@ -1,6 +1,5 @@
+/* eslint-disable */
 'use strict';
-
-var Alerts = null; //require('./../alerts');
 
 import _ from 'underscore';
 import url from 'url';
@@ -9,6 +8,7 @@ import moment from 'moment';
 import { navigate } from './navigate';
 import { isServerSide } from './misc';
 
+var Alerts = null; //require('./../alerts');
 
 /**
  * If the given term is selected, return the href for the term from context.filters.
@@ -29,14 +29,14 @@ export function getUnselectHrefIfSelectedFromResponseFilters(term, facet, filter
         var toFilter, fromFilter;
 
         if (facet.aggregation_type === 'range'){
-            toFilter    = _.findWhere(filters, { 'field' : field + '.to',   'term' : term.to }),
-            fromFilter  = _.findWhere(filters, { 'field' : field + '.from', 'term' : term.from });
+            toFilter    = _.findWhere(filters, { 'field' : `${field  }.to`,   'term' : term.to }),
+            fromFilter  = _.findWhere(filters, { 'field' : `${field  }.from`, 'term' : term.from });
         } else if (facet.aggregation_type === 'date_histogram'){
             var interval = getDateHistogramIntervalFromFacet(facet) || 'month',
                 toDate = moment.utc(term.key);
-            toDate.add(1, interval + 's');
-            toFilter    = _.findWhere(filters, { 'field' : field + '.to',   'term' : toDate.format().slice(0,10) }),
-            fromFilter  = _.findWhere(filters, { 'field' : field + '.from', 'term' : term.key });
+            toDate.add(1, `${interval  }s`);
+            toFilter    = _.findWhere(filters, { 'field' : `${field  }.to`,   'term' : toDate.format().slice(0,10) }),
+            fromFilter  = _.findWhere(filters, { 'field' : `${field  }.from`, 'term' : term.key });
         } else {
             throw new Error('Histogram not currently supported.');
             // Todo: var interval = ....
@@ -84,7 +84,7 @@ export function getUnselectHrefIfSelectedFromResponseFilters(term, facet, filter
                 }
             });
 
-            retHref = '?' + queryString.stringify(commonQs);
+            retHref = `?${  queryString.stringify(commonQs)}`;
             if (includePathName) {
                 retHref += partsFrom.pathname;
             }
@@ -132,7 +132,7 @@ export function buildSearchHref(field, term, searchBase){
         query[field] = term;
     }
     const queryStr = queryString.stringify(query);
-    parts.search = queryStr && queryStr.length > 0 ? ('?' + queryStr) : '';
+    parts.search = queryStr && queryStr.length > 0 ? (`?${  queryStr}`) : '';
 
     return url.format(parts);
 }
@@ -212,7 +212,7 @@ export function saveChangedFilters(newExpSetFilters, href=null, callback=null){
         }
     }
 
-    if (typeof href !== 'string') throw new Error("No valid href (3rd arg) supplied to saveChangedFilters: " + href);
+    if (typeof href !== 'string') throw new Error(`No valid href (3rd arg) supplied to saveChangedFilters: ${  href}`);
 
     const origHref = href;
     const newHref = filtersToHref(newExpSetFilters, href);
@@ -365,9 +365,9 @@ export function filtersToHref(expSetFilters, currentHref, sortColumn = null, sor
 
     if (typeof sortColumn === 'string'){
         if (sortReverse){
-            urlString += ('&sort=-' + sortColumn);
+            urlString += (`&sort=-${  sortColumn}`);
         } else {
-            urlString += ('&sort=' + sortColumn);
+            urlString += (`&sort=${  sortColumn}`);
         }
     }
 
@@ -425,7 +425,7 @@ export function expSetFiltersToURLQuery(expSetFilters){
     return _.map(_.pairs(expSetFiltersToJSON(expSetFilters)), function([field, terms]){
         return _.map(terms, function(t){
             // `t` term already ran thru encodeURIComponent in `expSetFiltersToJSON`
-            return encodeURIComponent(field) + '=' + t.replace(/%20/g, "+");
+            return `${encodeURIComponent(field)  }=${  t.replace(/%20/g, "+")}`;
         }).join('&');
     }).join('&');
 }
@@ -530,7 +530,7 @@ function getBaseHref(currentHref = '/browse/', hrefPath = null){
         hrefPath = urlParts.pathname;
     }
 
-    const baseHref = (urlParts.protocol && urlParts.host) ? urlParts.protocol + '//' + urlParts.host + hrefPath : hrefPath;
+    const baseHref = (urlParts.protocol && urlParts.host) ? `${urlParts.protocol  }//${  urlParts.host  }${hrefPath}` : hrefPath;
     const hrefQuery = _.pick(urlParts.query, 'type', 'q');
     if (hrefPath.indexOf('/search/') > -1){
         if (typeof hrefQuery.type !== 'string'){
@@ -538,7 +538,7 @@ function getBaseHref(currentHref = '/browse/', hrefPath = null){
         }
     }
 
-    return baseHref + (_.keys(hrefQuery).length > 0 ? '?' + queryString.stringify(hrefQuery) : '');
+    return baseHref + (_.keys(hrefQuery).length > 0 ? `?${  queryString.stringify(hrefQuery)}` : '');
 }
 
 export function searchQueryStringFromHref(href){
