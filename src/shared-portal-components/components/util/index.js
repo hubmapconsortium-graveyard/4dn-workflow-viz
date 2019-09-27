@@ -1,5 +1,5 @@
 'use strict';
-
+/*eslint-disable */
 /**
  * A directory of methods and maybe a mini-component or two for common use.
  *
